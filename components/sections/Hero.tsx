@@ -1,87 +1,142 @@
+// src/components/sections/Hero.tsx
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowUpRight, Activity, ThermometerSun } from "lucide-react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Environment, Float, MeshTransmissionMaterial } from "@react-three/drei";
+import { useRef } from "react";
+import type { Mesh } from "three";
 
-export default function Hero() {
+// --- 1. COMPONENTE 3D: EL ASSET DE INGENIERÍA (DARK MODE) ---
+function IndustrialCore() {
+  const meshRef = useRef<Mesh>(null);
+
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.x += delta * 0.1;
+      meshRef.current.rotation.y += delta * 0.15;
+    }
+  });
+
   return (
-    <section className="relative min-h-screen flex items-center pt-20 overflow-hidden">
+    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={2}>
+      <mesh ref={meshRef} scale={1.8}>
+        <torusGeometry args={[2, 0.6, 64, 128]} />
+        {/* Ajustado para Dark Mode: Más oscuro, refleja las luces azules */}
+        <MeshTransmissionMaterial 
+          thickness={0.5} 
+          roughness={0.15} 
+          transmission={0.9} 
+          ior={1.5} 
+          chromaticAberration={0.06} 
+          backside={true} 
+          color="#111111"
+        />
+      </mesh>
+    </Float>
+  );
+}
+
+// --- 2. COMPONENTE PRINCIPAL: HERO ---
+export default function Hero() {
+  // EL FIX DE TYPESCRIPT
+  const EASE_ELITE = [0.16, 1, 0.3, 1] as const;
+
+  const textRevealVariants = {
+    hidden: { y: "100%", opacity: 0, rotate: 2 },
+    visible: { y: "0%", opacity: 1, rotate: 0, transition: { duration: 1.2, ease: EASE_ELITE } },
+  };
+
+  return (
+    // Fondo asfalto profundo (#050505) con texto base en blanco
+    <section className="relative min-h-screen flex items-center bg-[#050505] text-white overflow-hidden">
       
-      {/* FONDO (Background) */}
-      <div className="absolute inset-0 z-0">
-        {/* Gradiente radial para simular luz industrial */}
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,_var(--tw-gradient-stops))] from-industrial-800 via-industrial-900 to-black opacity-80"></div>
-        {/* Grid sutil para efecto técnico */}
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 brightness-100 contrast-150"></div>
+      {/* --- CANVAS 3D DE FONDO --- */}
+      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none mix-blend-screen">
+        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
+          <ambientLight intensity={0.1} />
+          {/* Luz principal blanca */}
+          <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
+          {/* Luz de rebote AZUL ELÉCTRICO para bañar el cristal 3D */}
+          <directionalLight position={[-10, -10, -5]} intensity={3} color="#00A3FF" />
+          <Environment preset="city" />
+          <IndustrialCore />
+        </Canvas>
       </div>
 
-      <div className="container mx-auto px-4 relative z-10 grid lg:grid-cols-2 gap-12 items-center">
+      {/* --- CONTENIDO PRINCIPAL --- */}
+      <div className="container mx-auto px-6 md:px-12 relative z-10 w-full pt-24 pb-12">
         
-        {/* TEXTO (Columna Izquierda) */}
         <motion.div 
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8 }}
+          initial="hidden"
+          animate="visible"
+          transition={{ staggerChildren: 0.1 }}
+          className="flex flex-col items-start md:items-center text-left md:text-center w-full max-w-6xl mx-auto"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-6">
-            <span className="w-2 h-2 rounded-full bg-electric animate-pulse"></span>
-            <span className="text-xs font-medium text-engine-200 tracking-wide uppercase">Ingeniería Certificada</span>
-          </div>
           
-          <h1 className="text-4xl md:text-6xl font-bold text-white leading-tight mb-6">
-            Climatización Industrial para la <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric via-blue-400 to-cyan-300">Continuidad Operativa</span>
-          </h1>
-          
-          <p className="text-lg text-engine-DEFAULT mb-8 max-w-xl leading-relaxed">
-            Optimizamos sistemas HVAC para industrias, data centers y edificios corporativos en Venezuela. Reduzca costos energéticos y evite paradas críticas.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4">
-            <button className="px-8 py-4 bg-electric hover:bg-blue-600 text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105">
-              Solicitar Auditoría <ArrowRight className="w-5 h-5" />
-            </button>
-            <button className="px-8 py-4 bg-transparent border border-white/20 hover:bg-white/5 text-white font-medium rounded-lg transition-all">
-              Ver Servicios
-            </button>
-          </div>
-
-          <div className="mt-10 flex items-center gap-6 text-sm text-engine-200">
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-electric" />
-              <span>Normativa ASHRAE</span>
+          {/* ETIQUETA TÉCNICA (Status Console) */}
+          <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 1, ease: EASE_ELITE } } }} className="mb-8">
+            <div className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-white/80 font-medium tracking-[0.2em] uppercase border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-sm backdrop-blur-md shadow-[0_0_15px_rgba(0,163,255,0.05)]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
+              <span><span className="text-white/30 mr-2">1 [INFO]</span> Ingeniería Térmica</span>
             </div>
-            <div className="flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-electric" />
-              <span>Eficiencia Energética</span>
+          </motion.div>
+
+          {/* TITULAR MONUMENTAL */}
+          <div className="flex flex-col mb-8 w-full">
+            <div className="overflow-hidden">
+              <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Cero margen
+              </motion.h1>
+            </div>
+            <div className="overflow-hidden">
+              <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white/30 uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                de error.
+              </motion.h1>
+            </div>
+            <div className="overflow-hidden mt-1 md:mt-2">
+              <motion.h1 variants={textRevealVariants} className="text-4xl sm:text-5xl lg:text-[80px] font-bold tracking-tight leading-[0.9] text-[#00A3FF] uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Continuidad absoluta.
+              </motion.h1>
             </div>
           </div>
-        </motion.div>
 
-        {/* VISUAL (Columna Derecha - Placeholder Tecnológico) */}
-        <motion.div 
-           initial={{ opacity: 0, x: 20 }}
-           animate={{ opacity: 1, x: 0 }}
-           transition={{ duration: 0.8, delay: 0.2 }}
-           className="relative hidden lg:block"
-        >
-          {/* Aquí simulamos una interfaz técnica o imagen de equipo */}
-          <div className="relative rounded-2xl overflow-hidden border border-white/10 bg-industrial-800/50 backdrop-blur-sm p-2 shadow-2xl">
-             {/* Placeholder visual - Reemplazar luego con foto real */}
-             <div className="aspect-[4/3] rounded-xl bg-gradient-to-br from-industrial-700 to-industrial-900 flex items-center justify-center relative overflow-hidden group">
-                <div className="absolute inset-0 bg-electric/10 group-hover:bg-electric/5 transition-colors"></div>
-                {/* Texto simulado */}
-                <div className="text-center p-6">
-                  <div className="text-5xl font-bold text-white mb-2">24°C</div>
-                  <div className="text-engine-DEFAULT text-sm tracking-widest uppercase">Temperatura Controlada</div>
-                  <div className="mt-4 flex justify-center gap-2">
-                    <span className="h-1 w-12 bg-green-500 rounded-full"></span>
-                    <span className="h-1 w-2 bg-industrial-600 rounded-full"></span>
-                  </div>
-                </div>
-             </div>
+          {/* COPY */}
+          <div className="overflow-hidden w-full max-w-2xl mb-12">
+            <motion.p variants={textRevealVariants} className="text-base md:text-xl text-white/60 leading-relaxed font-medium">
+              Diseñamos e instalamos infraestructuras HVAC y de refrigeración comercial. 
+              Garantizamos la estabilidad térmica de data centers, quirófanos y plantas industriales donde una parada técnica, sin importar las condiciones externas, <span className="text-white font-bold">no es una opción</span>.
+            </motion.p>
           </div>
-        </motion.div>
 
+          {/* CALL TO ACTION (Contraste extremo: Píldora blanca) */}
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3, ease: EASE_ELITE } } }} className="flex w-full justify-start md:justify-center mb-16">
+            <button className="group relative px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-xs md:text-sm uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-3 hover:bg-gray-200 transition-colors shadow-[0_0_30px_rgba(0,163,255,0.15)]">
+              <span className="relative z-10 flex items-center gap-2">
+                Agendar Inspección 
+                <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              </span>
+            </button>
+          </motion.div>
+
+          {/* MICRO-DASHBOARD */}
+          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 1, delay: 0.5 } } }} className="w-full flex flex-row gap-8 md:gap-16 justify-start md:justify-center border-t border-white/10 pt-8">
+            <div className="flex flex-col items-start md:items-center">
+              <span className="flex items-center gap-2 font-mono text-white text-lg md:text-xl font-bold">
+                <Activity className="w-4 h-4 md:w-5 md:h-5 text-[#00A3FF]" /> 24/7
+              </span>
+              <span className="text-white/40 text-[10px] md:text-xs font-mono uppercase tracking-widest mt-1">Soporte Crítico</span>
+            </div>
+            <div className="flex flex-col items-start md:items-center">
+              <span className="flex items-center gap-2 font-mono text-white text-lg md:text-xl font-bold">
+                <ThermometerSun className="w-4 h-4 md:w-5 md:h-5 text-[#00A3FF]" /> Exactitud
+              </span>
+              <span className="text-white/40 text-[10px] md:text-xs font-mono uppercase tracking-widest mt-1">Normativa ASHRAE</span>
+            </div>
+          </motion.div>
+
+        </motion.div>
       </div>
     </section>
   );

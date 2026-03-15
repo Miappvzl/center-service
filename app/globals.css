@@ -1,33 +1,48 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* app/globals.css */
 
+/* 1. La Invocación Maestra de Tailwind v4 */
 @import "tailwindcss";
 
-:root {
-  --background: #050505;
-  --foreground: #F8FAFC;
-  scroll-behavior: smooth;
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-}
-
-/* El resto de tus estilos... */
-
-/* Efecto Vidrio Industrial (Glassmorphism) */
-.glass-panel {
-  background: rgba(18, 18, 18, 0.7);
-  backdrop-filter: blur(12px);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-/* Textura de ruido para fondos industriales */
-.bg-noise {
+/* 2. Textura global nivel Awwwards (Noise sutil para Light Mode) */
+/* app/globals.css (fragmento) */
+.noise-overlay {
   background-image: url("https://grainy-gradients.vercel.app/noise.svg");
-  opacity: 0.05;
-  mix-blend-mode: overlay;
+  opacity: 0.04; 
+  mix-blend-mode: overlay; /* Vuelve a overlay para modo oscuro */
   pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+}
+
+/* 3. Ocultar scrollbar nativa para dar paso al SmoothScroll de Lenis/Framer */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+/* Animaciones para el Muro de Confianza (Masonry Marquee) */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 45s linear infinite;
+  width: max-content;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 45s linear infinite;
+  width: max-content;
+}
+
+/* Pausa elegante al interactuar */
+.marquee-container:hover .animate-marquee-left,
+.marquee-container:hover .animate-marquee-right {
+  animation-play-state: paused;
 }

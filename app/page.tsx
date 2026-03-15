@@ -2,10 +2,10 @@ import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer"; // <--- Importamos el Footer
 
 import Hero from "@/components/sections/Hero";
-import Services from "@/components/sections/Services";
-import Industries from "@/components/sections/Industries";
-import Workflow from "@/components/sections/Workflow";
-import Trust from "@/components/sections/Trust";
+
+import Sectores from "@/components/sections/Sectores";
+import Metodologia from "@/components/sections/Metodologia";
+import PruebaSocial from "@/components/sections/PruebaSocial";
 
 export default function Home() {
   return (
@@ -14,10 +14,10 @@ export default function Home() {
       
       {/* SECCIONES PRINCIPALES */}
       <Hero />
-      <Services />
-      <Industries />
-      <Workflow />
-      <Trust />
+      <Sectores/>
+      <Metodologia/>
+      <PruebaSocial/>
+   
       
       {/* CIERRE */}
       <Footer />
