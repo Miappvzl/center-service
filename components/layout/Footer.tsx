@@ -1,123 +1,70 @@
+// src/components/layout/Footer.tsx
 "use client";
 
-import { motion } from "framer-motion";
-import { Mail, Phone, MapPin, ArrowRight, Instagram, Linkedin, Facebook } from "lucide-react";
+import { Activity } from "lucide-react";
 
 export default function Footer() {
-  const currentYear = new Date().getFullYear();
-
   return (
-    <footer id="contacto" className="bg-industrial-900 border-t border-white/10 pt-24 pb-12 relative overflow-hidden">
+    <footer className="relative bg-[#050505] text-white pt-20 pb-8 border-t border-white/5 overflow-hidden">
       
-      {/* Elemento decorativo de fondo (Grid) */}
-      <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-5"></div>
-      <div className="absolute bottom-0 left-0 right-0 h-[500px] bg-gradient-to-t from-electric/5 to-transparent pointer-events-none"></div>
+      {/* Fondo de Cuadrícula Sutil */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
 
-      <div className="container mx-auto px-4 relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 mb-24">
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
           
-          {/* COLUMNA IZQUIERDA: EL CIERRE DE VENTA (CTA) */}
-          <div className="max-w-2xl">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-            >
-              <h2 className="text-4xl md:text-6xl font-bold text-white mb-6 tracking-tight">
-                ¿Listo para optimizar <br />
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-electric to-cyan-400">
-                  su infraestructura?
-                </span>
-              </h2>
-              
-              <p className="text-engine-200 text-lg mb-10 max-w-md leading-relaxed">
-                Hable directamente con los ingenieros, no con vendedores. Diagnóstico preliminar sin compromiso en menos de 24 horas.
-              </p>
-
-              <div className="flex flex-col sm:flex-row gap-4">
-                <a 
-                  href="https://wa.me/584120000000" // <--- CAMBIA ESTO POR TU NÚMERO
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-8 py-4 bg-electric hover:bg-blue-600 text-white font-bold rounded-lg flex items-center justify-center gap-2 transition-all shadow-[0_0_20px_rgba(37,99,235,0.4)] hover:scale-105"
-                >
-                  <Phone className="w-5 h-5" />
-                  Agendar Visita Técnica
-                </a>
-                
-                <a 
-                  href="mailto:contacto@centerservice.com"
-                  className="px-8 py-4 bg-white/5 border border-white/10 hover:bg-white/10 text-white font-medium rounded-lg flex items-center justify-center gap-2 transition-all"
-                >
-                  <Mail className="w-5 h-5" />
-                  Enviar Solicitud
-                </a>
+          {/* Marca */}
+          <div className="lg:col-span-2 flex flex-col items-start">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-10 h-10 rounded-full bg-[#00A3FF] flex items-center justify-center neo-brutal-glow">
+                <Activity className="w-5 h-5 text-black" strokeWidth={3} />
               </div>
-            </motion.div>
+              <span className="text-2xl font-black tracking-tighter uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Center<span className="text-[#00A3FF]">Service</span>
+              </span>
+            </div>
+            <p className="text-white/50 text-sm max-w-sm font-medium leading-relaxed">
+              Ingeniería térmica de alta precisión. Diseñamos, instalamos y protegemos infraestructuras HVAC en entornos residenciales, comerciales e industriales en Venezuela.
+            </p>
           </div>
 
-          {/* COLUMNA DERECHA: DATOS DUROS & NAVEGACIÓN */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-12 lg:pl-12 border-l border-white/5">
-            
-            {/* Ubicación */}
-            <div>
-              <h4 className="text-white font-bold mb-6 flex items-center gap-2">
-                <MapPin className="text-electric w-4 h-4" />
-                Base de Operaciones
-              </h4>
-              <p className="text-engine-200 text-sm leading-relaxed mb-4">
-                Cobertura principal en:<br />
-                <span className="text-white font-medium">Valencia, Zona Industrial</span><br />
-                y Estado Cojedes.
-              </p>
-              <div className="text-xs text-white/40 font-mono mt-4">
-                DISPONIBILIDAD INMEDIATA
-                <br />
-                LUN - SAB / 8:00 AM - 6:00 PM
-              </div>
-            </div>
+          {/* Links */}
+          <div className="flex flex-col">
+            <h4 className="font-mono text-xs text-[#00A3FF] uppercase tracking-widest font-bold mb-6">Navegación</h4>
+            <ul className="flex flex-col gap-4">
+              <li><a href="#sectores" className="text-white/60 hover:text-white text-sm font-medium transition-colors">Áreas de Operación</a></li>
+              <li><a href="#metodologia" className="text-white/60 hover:text-white text-sm font-medium transition-colors">Proceso Técnico</a></li>
+              <li><a href="#faq" className="text-white/60 hover:text-white text-sm font-medium transition-colors">Base de Conocimiento</a></li>
+            </ul>
+          </div>
 
-            {/* Enlaces Rápidos */}
-            <div>
-              <h4 className="text-white font-bold mb-6">Navegación</h4>
-              <ul className="space-y-4">
-                {['Servicios', 'Proyectos', 'Nosotros', 'Protocolos'].map((item) => (
-                  <li key={item}>
-                    <a href={`#${item.toLowerCase()}`} className="text-engine-200 hover:text-electric transition-colors text-sm flex items-center gap-2 group">
-                      <span className="w-1 h-1 bg-white/20 rounded-full group-hover:bg-electric transition-colors"></span>
-                      {item}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
+          {/* Legal / Contacto */}
+          <div className="flex flex-col">
+            <h4 className="font-mono text-xs text-[#00A3FF] uppercase tracking-widest font-bold mb-6">Soporte</h4>
+            <ul className="flex flex-col gap-4">
+              <li className="text-white/60 text-sm font-medium">Emergencias 24/7</li>
+              <li className="text-white/60 text-sm font-medium">+58 412 000 0000</li>
+              <li className="text-white/60 text-sm font-medium">contacto@centerserviceve.com</li>
+            </ul>
           </div>
         </div>
 
-        {/* BARRA INFERIOR (LEGAL) */}
-        <div className="border-t border-white/10 pt-8 flex flex-col md:flex-row items-center justify-between gap-4">
+        {/* Separador */}
+        <div className="w-full h-[1px] bg-white/10 mb-8"></div>
+
+        {/* Letra pequeña y Sello de Autor */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest text-center md:text-left">
+            © {new Date().getFullYear()} Center Service. Todos los derechos reservados.
+          </p>
           
-          <div className="flex items-center gap-2">
-            <span className="text-xl font-bold tracking-tight text-white">
-              Center<span className="text-electric">Service</span>
-            </span>
-            <span className="text-white/20 text-sm">|</span>
-            <span className="text-white/40 text-xs">
-              © {currentYear} Ingeniería Aplicada.
-            </span>
+          <div className="flex items-center gap-2 font-mono text-[10px] text-white/30 uppercase tracking-widest">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+            Sistemas Operativos | <span className="text-white/50">ENG: QUANZOS</span>
           </div>
-
-          {/* Socials (Iconos minimalistas) */}
-          <div className="flex items-center gap-6">
-            {[Instagram, Linkedin, Facebook].map((Icon, i) => (
-              <a key={i} href="#" className="text-white/40 hover:text-electric transition-colors">
-                <Icon size={20} />
-              </a>
-            ))}
-          </div>
-
         </div>
+
       </div>
     </footer>
   );

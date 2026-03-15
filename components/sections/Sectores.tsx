@@ -4,10 +4,9 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
+import Image from "next/image"; // ⚡ IMPORTACIÓN CRÍTICA PARA RENDIMIENTO
 
 // --- DATA DEL CLIENTE INTEGRADA AL NUEVO DISEÑO ---
-// He utilizado los códigos (ej. IND-HVAC) como el subtítulo técnico (queda brutal)
-// y he extraído palabras clave de la descripción para usarlas como los "Tags".
 const sectors = [
   {
     id: "01",
@@ -53,7 +52,8 @@ export default function Sectores() {
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
           
           {/* COLUMNA IZQUIERDA: Header Sticky */}
-          <div className="lg:col-span-4 flex flex-col items-start lg:sticky lg:top-32 h-fit">
+          {/* Añadimos gpu-accelerated para que el sticky no cause repaints costosos */}
+          <div className="lg:col-span-4 flex flex-col items-start lg:sticky lg:top-32 h-fit gpu-accelerated">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -88,18 +88,18 @@ export default function Sectores() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="border-b border-white/10 flex flex-col"
+                  className="border-b border-white/10 flex flex-col gpu-accelerated"
                 >
                   {/* BOTÓN DEL ACORDEÓN */}
                   <button 
                     onClick={() => setActiveIndex(isActive ? null : index)}
-                    className="w-full py-8 md:py-12 flex items-center justify-between group text-left"
+                    className="w-full py-8 md:py-12 flex items-center justify-between group text-left focus:outline-none"
+                    aria-expanded={isActive}
                   >
-                    <div className="flex items-baseline gap-4 md:gap-8">
+                    <div className="flex items-baseline gap-4 md:gap-8 pr-4">
                       <span className={`font-mono text-sm md:text-lg font-medium transition-colors duration-300 ${isActive ? 'text-[#00A3FF]' : 'text-white/20 group-hover:text-[#00A3FF]'}`}>
                         {sector.id}
                       </span>
-                      {/* Títulos adaptados */}
                       <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-white uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
                         {sector.title}
                       </h3>
@@ -120,7 +120,7 @@ export default function Sectores() {
                         initial={{ height: 0, opacity: 0 }}
                         animate={{ height: "auto", opacity: 1 }}
                         exit={{ height: 0, opacity: 0 }}
-                        transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} // Ligeramente más rápido para que no haya lag
                         className="overflow-hidden"
                       >
                         <div className="pb-12 pt-2 flex flex-col md:flex-row gap-8 md:gap-12 pl-0 md:pl-16 md:pr-4">
@@ -136,7 +136,7 @@ export default function Sectores() {
                               </p>
                             </div>
                             
-                            {/* Tags Dinámicos extraídos del copy */}
+                            {/* Tags Dinámicos */}
                             <div className="flex flex-wrap gap-2 mt-auto">
                               {sector.tags.map((tag, i) => (
                                 <span key={i} className="px-3 py-1 bg-white/5 text-white/60 font-mono text-[10px] uppercase tracking-wider border border-white/5">
@@ -146,16 +146,17 @@ export default function Sectores() {
                             </div>
                           </div>
 
-                          {/* Imagen del Cliente (Mantiene el filtro oscuro hasta el Hover) */}
-                          <div className="w-full md:w-5/12 aspect-[4/3] md:aspect-square bg-[#0A0A0A] overflow-hidden relative group border border-white/5">
-                            <motion.img 
-                              initial={{ scale: 1.1 }}
-                              animate={{ scale: 1 }}
-                              transition={{ duration: 0.8 }}
-                              src={sector.image} 
-                              alt={`Servicio ${sector.title}`}
-                              className="w-full h-full object-cover filter grayscale opacity-60 contrast-125 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700"
-                            />
+                          {/* IMAGEN ULTRA-OPTIMIZADA CON NEXT/IMAGE */}
+                          {/* Envolvemos en un contenedor relative con aspect ratio forzado */}
+                          <div className="w-full md:w-5/12 aspect-[4/3] md:aspect-square bg-[#0A0A0A] overflow-hidden relative group border border-white/5 gpu-accelerated rounded-sm">
+                            
+                           <Image 
+  src={sector.image} 
+  alt={`Servicio ${sector.title}`}
+  fill
+  sizes="(max-width: 768px) 100vw, 33vw" 
+  className="object-cover filter grayscale opacity-60 contrast-125 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
+/>
                             <div className="absolute inset-0 bg-black/40 group-hover:bg-black/0 transition-colors duration-500 pointer-events-none"></div>
                           </div>
 

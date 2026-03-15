@@ -1,46 +1,72 @@
 // src/components/sections/Hero.tsx
 "use client";
 
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { ArrowUpRight, Activity, ThermometerSun } from "lucide-react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { Environment, Float, MeshTransmissionMaterial } from "@react-three/drei";
-import { useRef } from "react";
+import { Float } from "@react-three/drei";
 import type { Mesh } from "three";
 
-// --- 1. COMPONENTE 3D: EL ASSET DE INGENIERÍA (DARK MODE) ---
+// --- 1. COMPONENTE 3D: ANILLO MONOLÍTICO DE TITANIO (CLEAN LOOK) ---
 function IndustrialCore() {
   const meshRef = useRef<Mesh>(null);
 
   useFrame((state, delta) => {
     if (meshRef.current) {
-      meshRef.current.rotation.x += delta * 0.1;
-      meshRef.current.rotation.y += delta * 0.15;
+      // Movimiento majestuoso, muy lento y controlado
+      meshRef.current.rotation.x += delta * 0.05;
+      meshRef.current.rotation.y += delta * 0.08;
     }
   });
 
   return (
-    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={2}>
+    // Flotación sutil, sin movimientos bruscos
+    <Float speed={1} rotationIntensity={0.2} floatIntensity={1}>
       <mesh ref={meshRef} scale={1.8}>
-        <torusGeometry args={[2, 0.6, 64, 128]} />
-        {/* Ajustado para Dark Mode: Más oscuro, refleja las luces azules */}
-        <MeshTransmissionMaterial 
-          thickness={0.5} 
-          roughness={0.15} 
-          transmission={0.9} 
-          ior={1.5} 
-          chromaticAberration={0.06} 
-          backside={true} 
-          color="#111111"
+        {/* Geometría más estilizada: un anillo un poco más delgado y elegante */}
+        <torusGeometry args={[2.2, 0.35, 64, 64]} />
+        
+        {/* MATERIAL DE ALTA GAMA: Titanio oscuro pulido */}
+        <meshStandardMaterial 
+          color="#020202" // Negro abismal
+          metalness={1}   // 100% metálico (actúa como un espejo para las luces)
+          roughness={0.15} // Ligeramente pulido, brillo concentrado y elegante
         />
       </mesh>
     </Float>
   );
 }
 
-// --- 2. COMPONENTE PRINCIPAL: HERO ---
+// --- 2. EL ESCUDO: CANVAS MEMOIZADO E ILUMINACIÓN DE ESTUDIO ---
+const Background3D = React.memo(() => {
+  return (
+    <div className="absolute inset-0 z-0 opacity-70 pointer-events-none mix-blend-screen gpu-accelerated">
+      <Canvas 
+        camera={{ position: [0, 0, 8], fov: 45 }}
+        dpr={[1, 1.5]} 
+        gl={{ antialias: false, powerPreference: "high-performance", alpha: true, stencil: false, depth: false }} 
+      >
+        {/* Iluminación base suave */}
+        <ambientLight intensity={0.5} />
+        
+        {/* Luz cenital (arquitectónica blanca): Crea un destello de luz dura en la parte superior */}
+        <directionalLight position={[5, 10, 5]} intensity={8} color="#ffffff" />
+        
+        {/* Luz de relleno (azul corporativo): Baña la parte inferior del anillo */}
+        <directionalLight position={[-5, -10, -5]} intensity={15} color="#00A3FF" />
+        
+        <IndustrialCore />
+      </Canvas>
+    </div>
+  );
+});
+
+Background3D.displayName = "Background3D";
+
+
+// --- 3. COMPONENTE PRINCIPAL: HERO ---
 export default function Hero() {
-  // EL FIX DE TYPESCRIPT
   const EASE_ELITE = [0.16, 1, 0.3, 1] as const;
 
   const textRevealVariants = {
@@ -49,23 +75,10 @@ export default function Hero() {
   };
 
   return (
-    // Fondo asfalto profundo (#050505) con texto base en blanco
-    <section className="relative min-h-screen flex items-center bg-[#050505] text-white overflow-hidden">
+    <section className="relative min-h-screen flex items-center bg-[#050505] text-white overflow-hidden selection:bg-[#00A3FF] selection:text-white">
       
-      {/* --- CANVAS 3D DE FONDO --- */}
-      <div className="absolute inset-0 z-0 opacity-40 pointer-events-none mix-blend-screen">
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }}>
-          <ambientLight intensity={0.1} />
-          {/* Luz principal blanca */}
-          <directionalLight position={[10, 10, 5]} intensity={1} color="#ffffff" />
-          {/* Luz de rebote AZUL ELÉCTRICO para bañar el cristal 3D */}
-          <directionalLight position={[-10, -10, -5]} intensity={3} color="#00A3FF" />
-          <Environment preset="city" />
-          <IndustrialCore />
-        </Canvas>
-      </div>
+      <Background3D />
 
-      {/* --- CONTENIDO PRINCIPAL --- */}
       <div className="container mx-auto px-6 md:px-12 relative z-10 w-full pt-24 pb-12">
         
         <motion.div 
@@ -75,15 +88,13 @@ export default function Hero() {
           className="flex flex-col items-start md:items-center text-left md:text-center w-full max-w-6xl mx-auto"
         >
           
-          {/* ETIQUETA TÉCNICA (Status Console) */}
           <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 1, ease: EASE_ELITE } } }} className="mb-8">
-            <div className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-white/80 font-medium tracking-[0.2em] uppercase border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-sm backdrop-blur-md shadow-[0_0_15px_rgba(0,163,255,0.05)]">
+            <div className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-white/80 font-medium tracking-[0.2em] uppercase border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-none backdrop-blur-md shadow-[0_0_15px_rgba(0,163,255,0.05)]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
               <span><span className="text-white/30 mr-2">1 [INFO]</span> Ingeniería Térmica</span>
             </div>
           </motion.div>
 
-          {/* TITULAR MONUMENTAL */}
           <div className="flex flex-col mb-8 w-full">
             <div className="overflow-hidden">
               <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
@@ -102,7 +113,6 @@ export default function Hero() {
             </div>
           </div>
 
-          {/* COPY */}
           <div className="overflow-hidden w-full max-w-2xl mb-12">
             <motion.p variants={textRevealVariants} className="text-base md:text-xl text-white/60 leading-relaxed font-medium">
               Diseñamos e instalamos infraestructuras HVAC y de refrigeración comercial. 
@@ -110,9 +120,8 @@ export default function Hero() {
             </motion.p>
           </div>
 
-          {/* CALL TO ACTION (Contraste extremo: Píldora blanca) */}
           <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3, ease: EASE_ELITE } } }} className="flex w-full justify-start md:justify-center mb-16">
-            <button className="group relative px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-xs md:text-sm uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-3 hover:bg-gray-200 transition-colors shadow-[0_0_30px_rgba(0,163,255,0.15)]">
+            <button className="group relative px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-xs md:text-sm uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-3 hover:bg-gray-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)]" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
               <span className="relative z-10 flex items-center gap-2">
                 Agendar Inspección 
                 <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
@@ -120,19 +129,18 @@ export default function Hero() {
             </button>
           </motion.div>
 
-          {/* MICRO-DASHBOARD */}
           <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 1, delay: 0.5 } } }} className="w-full flex flex-row gap-8 md:gap-16 justify-start md:justify-center border-t border-white/10 pt-8">
-            <div className="flex flex-col items-start md:items-center">
-              <span className="flex items-center gap-2 font-mono text-white text-lg md:text-xl font-bold">
+            <div className="flex flex-col items-start md:items-center font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              <span className="flex items-center gap-2 text-white text-lg md:text-xl font-bold">
                 <Activity className="w-4 h-4 md:w-5 md:h-5 text-[#00A3FF]" /> 24/7
               </span>
-              <span className="text-white/40 text-[10px] md:text-xs font-mono uppercase tracking-widest mt-1">Soporte Crítico</span>
+              <span className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest mt-1">Soporte Crítico</span>
             </div>
-            <div className="flex flex-col items-start md:items-center">
-              <span className="flex items-center gap-2 font-mono text-white text-lg md:text-xl font-bold">
+            <div className="flex flex-col items-start md:items-center font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              <span className="flex items-center gap-2 text-white text-lg md:text-xl font-bold">
                 <ThermometerSun className="w-4 h-4 md:w-5 md:h-5 text-[#00A3FF]" /> Exactitud
               </span>
-              <span className="text-white/40 text-[10px] md:text-xs font-mono uppercase tracking-widest mt-1">Normativa ASHRAE</span>
+              <span className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest mt-1">Normativa ASHRAE</span>
             </div>
           </motion.div>
 
