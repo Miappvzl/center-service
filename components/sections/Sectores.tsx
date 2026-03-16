@@ -46,7 +46,8 @@ export default function Sectores() {
   const [activeIndex, setActiveIndex] = useState<number | null>(0);
 
   return (
-    <section className="relative py-24 md:py-40 bg-[#050505] text-white border-t border-white/5" id="sectores">
+    // ✅ DESPUÉS (Deja ver el fluido)
+<section className="relative py-24 md:py-40 text-white border-t border-white/5" id="sectores">
       <div className="container mx-auto px-6 md:px-12 max-w-7xl">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">

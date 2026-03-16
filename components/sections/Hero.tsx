@@ -8,53 +8,59 @@ import { Canvas, useFrame } from "@react-three/fiber";
 import { Float } from "@react-three/drei";
 import type { Mesh } from "three";
 
-// --- 1. COMPONENTE 3D: ANILLO MONOLÍTICO DE TITANIO (CLEAN LOOK) ---
+// --- 1. COMPONENTE 3D: EL OBJETO ---
 function IndustrialCore() {
   const meshRef = useRef<Mesh>(null);
 
   useFrame((state, delta) => {
     if (meshRef.current) {
-      // Movimiento majestuoso, muy lento y controlado
-      meshRef.current.rotation.x += delta * 0.05;
-      meshRef.current.rotation.y += delta * 0.08;
+      meshRef.current.rotation.x += delta * 0.12;
+      meshRef.current.rotation.y += delta * 0.25;
     }
   });
 
   return (
-    // Flotación sutil, sin movimientos bruscos
-    <Float speed={1} rotationIntensity={0.2} floatIntensity={1}>
+    <Float speed={0.4} rotationIntensity={0.1} floatIntensity={0}>
       <mesh ref={meshRef} scale={1.8}>
-        {/* Geometría más estilizada: un anillo un poco más delgado y elegante */}
-        <torusGeometry args={[2.2, 0.35, 64, 64]} />
+        {/* Geometría suave pero ligera (32x64) para mantener 60 FPS */}
+        <torusGeometry args={[3, 0.6, 32, 60]} />
         
-        {/* MATERIAL DE ALTA GAMA: Titanio oscuro pulido */}
-        <meshStandardMaterial 
-          color="#020202" // Negro abismal
-          metalness={1}   // 100% metálico (actúa como un espejo para las luces)
-          roughness={0.15} // Ligeramente pulido, brillo concentrado y elegante
+        {/* MATERIAL FÍSICO NATIVO: Luce premium (Metal oscuro/Barniz) sin Multi-pass Rendering */}
+        <meshPhysicalMaterial 
+          color="#050505" // Un tono base muy oscuro para el metal
+          metalness={5.5} // Alta metalicidad para reflejos intensos
+          roughness={0.15} // Superficie lisa para brillo nítido
+          clearcoat={9.0} // Capa de barniz para brillo profundo
+          clearcoatRoughness={10}
+          wireframe={false}
         />
       </mesh>
     </Float>
   );
 }
 
-// --- 2. EL ESCUDO: CANVAS MEMOIZADO E ILUMINACIÓN DE ESTUDIO ---
+// --- 2. EL ESCUDO: CANVAS MEMOIZADO (ILUMINACIÓN POTENCIADA) ---
+// React.memo evita re-renderizados innecesarios y protege el contexto WebGL.
 const Background3D = React.memo(() => {
   return (
-    <div className="absolute inset-0 z-0 opacity-70 pointer-events-none mix-blend-screen gpu-accelerated">
+    <div className="absolute inset-0 z-0 opacity-50 pointer-events-none mix-blend-screen gpu-accelerated">
       <Canvas 
         camera={{ position: [0, 0, 8], fov: 45 }}
         dpr={[1, 1.5]} 
+        // Configuraciones críticas para la estabilidad del WebGL
         gl={{ antialias: false, powerPreference: "high-performance", alpha: true, stencil: false, depth: false }} 
       >
-        {/* Iluminación base suave */}
-        <ambientLight intensity={0.5} />
+        {/* Iluminación Drásticamente Potenciada y Estratégica */}
+        <ambientLight intensity={18} /> {/* Luz ambiental más intensa */}
         
-        {/* Luz cenital (arquitectónica blanca): Crea un destello de luz dura en la parte superior */}
-        <directionalLight position={[5, 10, 5]} intensity={8} color="#ffffff" />
+        {/* Luz direccional blanca frontal y superior para highlight principal */}
+        <directionalLight position={[5, 8, 5]} intensity={20} color="#ffa851" /> 
         
-        {/* Luz de relleno (azul corporativo): Baña la parte inferior del anillo */}
-        <directionalLight position={[-5, -10, -5]} intensity={15} color="#00A3FF" />
+        {/* Luz direccional azul trasera e inferior para reflejos de color */}
+        <directionalLight position={[-10, -10, -8]} intensity={25} color="#00A3FF" /> 
+        
+        {/* Spotlight azul superior para un highlight específico */}
+        <spotLight position={[0, 80, 40]} intensity={10} color="#7173ff" penumbra={6} /> 
         
         <IndustrialCore />
       </Canvas>
@@ -62,6 +68,7 @@ const Background3D = React.memo(() => {
   );
 });
 
+// Nombrar el componente memoizado es buena práctica para las herramientas de desarrollo de React
 Background3D.displayName = "Background3D";
 
 
@@ -77,8 +84,10 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center bg-[#050505] text-white overflow-hidden selection:bg-[#00A3FF] selection:text-white">
       
+      {/* INYECTAMOS EL CANVAS PROTEGIDO Y POTENCIADO AQUÍ */}
       <Background3D />
 
+      {/* --- CONTENIDO PRINCIPAL --- */}
       <div className="container mx-auto px-6 md:px-12 relative z-10 w-full pt-24 pb-12">
         
         <motion.div 

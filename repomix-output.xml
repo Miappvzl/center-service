@@ -1,0 +1,1850 @@
+This file is a merged representation of the entire codebase, combined into a single document by Repomix.
+
+<file_summary>
+This section contains a summary of this file.
+
+<purpose>
+This file contains a packed representation of the entire repository's contents.
+It is designed to be easily consumable by AI systems for analysis, code review,
+or other automated processes.
+</purpose>
+
+<file_format>
+The content is organized as follows:
+1. This summary section
+2. Repository information
+3. Directory structure
+4. Repository files (if enabled)
+5. Multiple file entries, each consisting of:
+  - File path as an attribute
+  - Full contents of the file
+</file_format>
+
+<usage_guidelines>
+- This file should be treated as read-only. Any changes should be made to the
+  original repository files, not this packed version.
+- When processing this file, use the file path to distinguish
+  between different files in the repository.
+- Be aware that this file may contain sensitive information. Handle it with
+  the same level of security as you would the original repository.
+</usage_guidelines>
+
+<notes>
+- Some files may have been excluded based on .gitignore rules and Repomix's configuration
+- Binary files are not included in this packed representation. Please refer to the Repository Structure section for a complete list of file paths, including binary files
+- Files matching patterns in .gitignore are excluded
+- Files matching default ignore patterns are excluded
+- Files are sorted by Git change count (files with more changes are at the bottom)
+</notes>
+
+</file_summary>
+
+<directory_structure>
+.gitignore
+app/favicon.ico
+app/globals.css
+app/layout.tsx
+app/page.tsx
+components/layout/Footer.tsx
+components/layout/Navbar.tsx
+components/providers/SmoothScroll.tsx
+components/sections/Contacto.tsx
+components/sections/Faq.tsx
+components/sections/Hero.tsx
+components/sections/Metodologia.tsx
+components/sections/PruebaSocial.tsx
+components/sections/Sectores.tsx
+eslint.config.mjs
+lib/utils.ts
+next.config.ts
+package.json
+postcss.config.mjs
+public/file.svg
+public/globe.svg
+public/images/services/foto1 (1).webp
+public/images/services/foto1 (2).webp
+public/images/services/foto1 (3).webp
+public/images/services/foto1 (4).webp
+public/images/services/foto1 (5).webp
+public/images/services/foto1 (6).webp
+public/next.svg
+public/vercel.svg
+public/window.svg
+README.md
+tailwind.config.ts
+tsconfig.json
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path=".gitignore">
+# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
+
+# dependencies
+/node_modules
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# testing
+/coverage
+
+# next.js
+/.next/
+/out/
+
+# production
+/build
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# env files (can opt-in for committing if needed)
+.env*
+
+# vercel
+.vercel
+
+# typescript
+*.tsbuildinfo
+next-env.d.ts
+</file>
+
+<file path="components/providers/SmoothScroll.tsx">
+"use client";
+
+import { ReactNode, useEffect } from "react";
+import Lenis from "lenis";
+
+export default function SmoothScroll({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    const lenis = new Lenis({
+      duration: 1.2, // Duración de la inercia (más alto = más "resbaloso")
+      easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)), // Curva física exponencial
+      orientation: "vertical",
+      gestureOrientation: "vertical",
+      smoothWheel: true,
+      touchMultiplier: 2, // Sensibilidad en táctil
+    });
+
+    function raf(time: number) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+
+    requestAnimationFrame(raf);
+
+    return () => {
+      lenis.destroy();
+    };
+  }, []);
+
+  return <>{children}</>;
+}
+</file>
+
+<file path="components/sections/Contacto.tsx">
+// src/components/sections/Contacto.tsx
+"use client";
+
+import { useState } from "react";
+import { ArrowRight, Home, Store, Factory, Wrench, Snowflake, ShieldCheck, MapPin, Phone, Mail } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// --- OPCIONES HUMANAS (Copywriting Ultra-Breve) ---
+const locations = [
+  { id: "hogar", label: "MI HOGAR", icon: Home },
+  { id: "negocio", label: "MI NEGOCIO", icon: Store },
+  { id: "industria", label: "INDUSTRIA", icon: Factory },
+];
+
+const services = [
+  { id: "reparacion", label: "REPARACIÓN URGENTE", icon: Wrench },
+  { id: "mantenimiento", label: "MANTENIMIENTO", icon: ShieldCheck },
+  { id: "instalacion", label: "INSTALACIÓN NUEVA", icon: Snowflake },
+];
+
+export default function Contacto() {
+  const [selectedLocation, setSelectedLocation] = useState<string | null>("hogar");
+  const [selectedService, setSelectedService] = useState<string | null>(null);
+
+  // Número de WhatsApp real de Center Service
+  const whatsappNumber = "584120000000"; 
+
+  // Generador del mensaje dinámico (Texto Humano)
+  const handleWhatsAppClick = () => {
+    let mensaje = "Hola, me gustaría agendar una visita técnica con Center Service.";
+    
+    if (selectedLocation && selectedService) {
+      const locLabel = locations.find(l => l.id === selectedLocation)?.label.toLowerCase();
+      const servLabel = services.find(s => s.id === selectedService)?.label.toLowerCase();
+      mensaje = `Hola, necesito ayuda con un equipo en ${locLabel}. Requiero un servicio de ${servLabel}. ¿Cuándo podrían visitarme?`;
+    }
+
+    const encodedMessage = encodeURIComponent(mensaje);
+    window.open(`https://wa.me/${whatsappNumber}?text=${encodedMessage}`, "_blank");
+  };
+
+  return (
+    <section className="relative bg-[#050505] text-white overflow-hidden border-t border-white/5 selection:bg-[#00A3FF] selection:text-white" id="contacto">
+      
+      {/* EL FRAGMENTO DE LUZ SUPERIOR (Sello de la casa) */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-[1px] bg-gradient-to-r from-transparent via-[#00A3FF]/40 to-transparent z-10"></div>
+
+      {/* GRID EXPUESTO (Bordes rectos y duros) */}
+      {/* ✅ REQUERIMIENTO #3: 'flex-col-reverse' para mobile (formulario arriba, info abajo). */}
+      <div className="flex flex-col-reverse lg:grid lg:grid-cols-12 lg:border-b lg:border-white/5">
+        
+        {/* COLUMNA IZQUIERDA: Información y Autoridad (Fondo en Mobile, Izquierda Sticky en Desktop) */}
+        <div className="lg:col-span-5 flex flex-col justify-center p-8 md:p-16 lg:p-24 lg:border-r border-white/5 lg:sticky lg:top-32 lg:h-[calc(100vh-128px)]">
+          
+          <div className="inline-flex items-center gap-3 font-mono text-[10px] md:text-xs text-[#00A3FF] font-bold tracking-[0.2em] uppercase mb-10 border border-[#00A3FF]/20 bg-[#00A3FF]/5 px-4 py-2 rounded-none w-fit shadow-[0_0_15px_rgba(0,163,255,0.1)]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse"></span>
+            ATENCIÓN DIRECTA
+          </div>
+          
+          <h2 className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tighter text-white mb-8 uppercase leading-[0.85]" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+            SIN <br className="hidden lg:block"/>
+            <span className="text-white/20">ESPERAS.</span>
+          </h2>
+          
+          <p className="text-white/60 font-medium text-lg leading-relaxed mb-16 max-w-lg">
+            Rompemos con la informalidad. Agenda tu visita técnica directamente por WhatsApp con un especialista real.
+          </p>
+
+          {/* DATOS DE CONTACTO (Neo-Brutalistas) */}
+          <div className="flex flex-col gap-10 border-t border-white/5 pt-12">
+            <div className="flex items-center gap-6 group">
+              <MapPin className="w-6 h-6 text-[#00A3FF] shrink-0" />
+              <div>
+                <h4 className="text-white font-bold mb-1 uppercase tracking-tight">COBERTURA CENTRAL</h4>
+                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Cojedes y estados vecinos. Emergencias 24/7.</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 group">
+              <Phone className="w-6 h-6 text-[#00A3FF] shrink-0" />
+              <div>
+                <h4 className="text-white font-bold mb-1 uppercase tracking-tight">LÍNEA DIRECTA</h4>
+                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>+58 412 000 0000</p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-6 group">
+              <Mail className="w-6 h-6 text-[#00A3FF] shrink-0" />
+              <div>
+                <h4 className="text-white font-bold mb-1 uppercase tracking-tight">CORREO CORPORATIVO</h4>
+                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>contacto@centerserviceve.com</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* COLUMNA DERECHA: El Terminal de Triage (Neo-Brutalismo Puro) */}
+        {/* En mobile, esto aparece ARRIBA del bloque de información */}
+        <div className="lg:col-span-7 flex flex-col p-8 md:p-16 lg:p-24 bg-[#080808] border-b border-white/5 lg:border-b-0">
+          
+          <h3 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter text-white mb-4 uppercase leading-none" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+            ¿QUÉ <span className="text-white/30">NECESITAS?</span>
+          </h3>
+          <p className="font-mono text-xs text-white/40 uppercase tracking-widest mb-16 pointer-events-none" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+            Selección rápida para agendar tu visita.
+          </p>
+
+          {/* PASO 1: Ubicación (Interruptores Duros Neo-Brutal) */}
+          <div className="mb-12 border-b border-white/5 pb-12">
+            <label className="block text-white font-bold mb-6 text-xs uppercase tracking-[0.2em]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              1. ¿DÓNDE ESTÁ EL EQUIPO?
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              {locations.map((loc) => (
+                <button
+                  key={loc.id}
+                  onClick={() => setSelectedLocation(loc.id)}
+                  className={cn(
+                    "relative flex flex-row md:flex-col items-center md:items-start justify-center md:justify-between gap-4 p-5 transition-all duration-300 rounded-none border border-white/5 group",
+                    selectedLocation === loc.id 
+                      ? "bg-white text-black border-white neo-brutal-glow" // ✅ Contraste radical Neo-Brutal
+                      : "bg-[#050505] text-white/50 hover:border-white/20 hover:text-white"
+                  )}
+                >
+                  {/* ✅ FIX: strokeWidth={2} fijo, sin la variable undefined */}
+                  <loc.icon className={cn("w-6 h-6 md:mb-5", selectedLocation === loc.id ? "text-black" : "text-[#00A3FF]")} strokeWidth={2} />
+                  <span className="text-lg font-extrabold tracking-tighter uppercase leading-none" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>{loc.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* PASO 2: Tipo de Servicio (Interruptores Duros Neo-Brutal) */}
+          <div className="mb-16">
+            <label className="block text-white font-bold mb-6 text-xs uppercase tracking-[0.2em]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              2. ¿QUÉ SERVICIO REQUIERES?
+            </label>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+              {services.map((srv) => (
+                <button
+                  key={srv.id}
+                  onClick={() => setSelectedService(srv.id)}
+                  className={cn(
+                    "relative flex flex-row md:flex-col items-center md:items-start justify-center md:justify-between gap-4 p-5 transition-all duration-300 rounded-none border border-white/5 group",
+                    selectedService === srv.id 
+                      ? "bg-[#00A3FF] text-black border-[#00A3FF] neo-brutal-glow" // ✅ Contraste radical Neo-Brutal
+                      : "bg-[#050505] text-white/50 hover:border-white/20 hover:text-white"
+                  )}
+                >
+                  {/* ✅ FIX: strokeWidth={2} fijo */}
+                  <srv.icon className={cn("w-6 h-6 md:mb-5", selectedService === srv.id ? "text-black" : "text-white/70")} strokeWidth={2} />
+                  <span className="text-lg font-extrabold tracking-tighter uppercase leading-none" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>{srv.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* BOTÓN FINAL NEO-BRUTALISTA (WhatsApp) */}
+          <div className="flex w-full justify-start md:justify-center mb-16">
+            <button
+                onClick={handleWhatsAppClick}
+                disabled={!selectedLocation || !selectedService}
+            
+                className="group relative px-10 py-5 bg-white text-black font-black text-sm md:text-base uppercase tracking-[0.1em] rounded-full overflow-hidden flex items-center justify-center gap-3 hover:bg-neutral-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.15)] disabled:opacity-30 disabled:cursor-not-allowed"
+                style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}
+            >
+                <span className="relative z-10 flex items-center gap-2">
+                    CONTACTAR ESPECIALISTA
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform duration-300" />
+                </span>
+            </button>
+          </div>
+          
+          <p className="text-center font-mono text-[9px] uppercase tracking-widest text-white/20 mt-5 pointer-events-none" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+            Te responderemos de inmediato por WhatsApp.
+          </p>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="components/sections/Faq.tsx">
+// src/components/sections/Faq.tsx
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Plus } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// --- COPY SEO: Preguntas Reales del Mercado Venezolano ---
+const faqs = [
+  {
+    question: "¿Cómo protegen los equipos ante las fluctuaciones eléctricas?",
+    answer: "Las fallas de voltaje son el enemigo número uno en Venezuela. No solo instalamos el aire acondicionado o la cava; evaluamos y recomendamos sistemas de protección térmica y relés de fase específicos para la carga de tu equipo, garantizando que una caída de tensión no queme tu compresor."
+  },
+  {
+    question: "Mi equipo enfría poco pero consume mucha electricidad, ¿por qué?",
+    answer: "Suele deberse a serpentines obstruidos por falta de mantenimiento profundo o un sistema trabajando forzado por pérdida de eficiencia térmica. Nuestro diagnóstico con herramientas de precisión detecta si es un problema de flujo de aire, capacitores agotados o fallas en el aislamiento, corrigiéndolo para reducir tu factura eléctrica."
+  },
+  {
+    question: "¿Ofrecen garantía por los repuestos y la mano de obra?",
+    answer: "Absolutamente. Rompemos con la informalidad del sector. Todo proyecto, desde un mantenimiento residencial hasta una instalación de chillers industriales, viene con respaldo documentado. Usamos repuestos verificados y no damos por terminado el trabajo hasta medir que los parámetros de presión y temperatura sean óptimos."
+  },
+  {
+    question: "¿Es normal tener que 'recargarle gas' al aire acondicionado frecuentemente?",
+    answer: "No. El gas refrigerante no se consume ni se evapora por el uso. Si a tu equipo le falta gas, significa que hay una fuga en la tubería o en las conexiones. En lugar de cobrarte recargas infinitas, presurizamos el sistema con nitrógeno, localizamos la fuga, soldamos y luego hacemos la carga definitiva."
+  }
+];
+
+// --- COMPONENTE INTERNO: Pregunta Individual ---
+const FaqItem = ({ faq, isOpen, onClick }: { faq: any, isOpen: boolean, onClick: () => void }) => {
+  return (
+    <div className="border-b border-white/10 last:border-0">
+      <button
+        onClick={onClick}
+        className="flex w-full items-center justify-between py-6 md:py-8 text-left group focus:outline-none"
+        aria-expanded={isOpen}
+      >
+        <h3 className={cn(
+          "text-lg md:text-2xl font-bold pr-8 transition-colors duration-300",
+          isOpen ? "text-[#00A3FF]" : "text-white group-hover:text-white/80"
+        )} style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+          {faq.question}
+        </h3>
+        
+        {/* Icono animado (Plus que gira a X) */}
+        <motion.div 
+          animate={{ rotate: isOpen ? 45 : 0 }}
+          transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+          className={cn(
+            "flex shrink-0 items-center justify-center w-8 h-8 md:w-10 md:h-10 rounded-full border transition-colors duration-300",
+            isOpen ? "border-[#00A3FF] text-[#00A3FF]" : "border-white/10 text-white/50 group-hover:border-white/30"
+          )}
+        >
+          <Plus className="w-4 h-4 md:w-5 md:h-5" />
+        </motion.div>
+      </button>
+
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden"
+          >
+            <p className="pb-8 text-white/60 font-medium text-base md:text-lg leading-relaxed max-w-3xl">
+              {faq.answer}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
+export default function Faq() {
+  const [openIndex, setOpenIndex] = useState<number | null>(0); // El primero abierto por defecto
+
+  // --- MAGIA SEO: Generación del Schema Markup (JSON-LD) ---
+  const faqSchema = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": faqs.map((faq) => ({
+      "@type": "Question",
+      "name": faq.question,
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": faq.answer
+      }
+    }))
+  };
+
+  return (
+    <section className="relative py-24 md:py-32 bg-[#050505] border-t border-white/5" id="faq">
+      
+      {/* INYECCIÓN DEL SCRIPT PARA GOOGLE BOT */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
+
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-24">
+          
+          {/* COLUMNA IZQUIERDA: Titular Fijo (Sticky) */}
+          <div className="lg:col-span-5 flex flex-col items-start lg:sticky lg:top-32 h-fit">
+            <div className="inline-flex items-center gap-3 font-mono text-[10px] md:text-xs text-white/70 font-bold tracking-[0.2em] uppercase mb-6 border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-sm backdrop-blur-md">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
+              Base de Conocimiento
+            </div>
+            
+            <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.9] mb-6" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+              Respuestas <br />
+              <span className="text-white/30">Críticas.</span>
+            </h2>
+            
+            <p className="text-white/50 font-medium text-sm md:text-base max-w-sm leading-relaxed mb-8">
+              Rompemos con los mitos y las malas prácticas del sector. Si tienes dudas sobre tu infraestructura térmica, aquí hablamos con la verdad técnica.
+            </p>
+
+            {/* Micro-interacción: Botón secundario para contacto rápido */}
+            <a href="#contacto" className="inline-flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-[#00A3FF] hover:text-white transition-colors duration-300 group">
+              ¿No encuentras tu problema? Escríbenos 
+              <span className="group-hover:translate-x-1 transition-transform">→</span>
+            </a>
+          </div>
+
+          {/* COLUMNA DERECHA: Acordeón de Preguntas */}
+          <div className="lg:col-span-7 flex flex-col border-t border-white/10 mt-8 lg:mt-0">
+            {faqs.map((faq, index) => (
+              <FaqItem
+                key={index}
+                faq={faq}
+                isOpen={openIndex === index}
+                onClick={() => setOpenIndex(openIndex === index ? null : index)}
+              />
+            ))}
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="components/sections/Metodologia.tsx">
+// src/components/sections/Metodologia.tsx
+"use client";
+
+import { useState, useRef, useEffect } from "react";
+import { motion, useInView } from "framer-motion";
+import { Search, FileCheck, Wrench, ShieldCheck, Activity } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// --- COPY ESTRATÉGICO ---
+const steps = [
+  {
+    id: "01",
+    title: "Diagnóstico de Precisión",
+    description: "Evaluamos tu equipo a fondo usando herramientas de medición reales para encontrar la raíz del problema. Nada de adivinanzas ni 'cambiar piezas por cambiar'.",
+    icon: Search,
+  },
+  {
+    id: "02",
+    title: "Propuesta Transparente",
+    description: "Hablamos claro. Te entregamos un reporte exacto de la falla, las soluciones viables y un presupuesto cerrado, sin costos ocultos ni sorpresas de última hora.",
+    icon: FileCheck,
+  },
+  {
+    id: "03",
+    title: "Ejecución Impecable",
+    description: "Intervenimos el sistema respetando tu espacio. Utilizamos repuestos verificados, trabajamos con orden, limpieza total y protegemos las áreas de tu hogar o empresa.",
+    icon: Wrench,
+  },
+  {
+    id: "04",
+    title: "Estabilidad Garantizada",
+    description: "No nos vamos hasta medir el rendimiento. Realizamos pruebas de presión y temperatura para asegurar que el sistema enfríe perfectamente y consuma la energía correcta.",
+    icon: ShieldCheck,
+  }
+];
+
+// --- RUTAS DEL GRÁFICO (Reutilizables) ---
+const erraticPath = "M 0 50 Q 10 10 20 60 T 40 20 T 60 80 T 80 10 T 100 50";
+const stablePath = "M 0 50 Q 25 50 50 50 T 100 50";
+
+// --- MICRO-GRÁFICO PARA MÓVILES ---
+// Este componente se muestra debajo del texto en teléfonos
+const MobileMiniChart = ({ isStable }: { isStable: boolean }) => {
+  const pathColor = isStable ? "#00A3FF" : "#ef4444";
+  
+  return (
+    <div className="lg:hidden mt-6 h-16 w-full rounded-md border border-white/5 bg-[#0A0A0A] p-2 flex items-center relative overflow-hidden">
+      {/* Etiqueta de estado en miniatura */}
+      <div className="absolute top-2 left-2 flex items-center gap-1 z-10">
+         <Activity className={cn("w-3 h-3", isStable ? "text-[#00A3FF]" : "text-red-500 animate-pulse")} />
+         <span className="font-mono text-[8px] uppercase text-white/40 tracking-widest">
+            {isStable ? "ESTABILIZADO" : "ANOMALÍA TÉRMICA"}
+         </span>
+      </div>
+      
+      {/* Vector SVG */}
+      <svg viewBox="0 0 100 100" className="w-full h-full opacity-80" preserveAspectRatio="none">
+       <motion.path
+  initial={{ d: isStable ? stablePath : erraticPath }} // <-- AÑADE ESTA LÍNEA
+  d={isStable ? stablePath : erraticPath}
+  fill="transparent"
+          stroke={pathColor}
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          animate={{ d: isStable ? stablePath : erraticPath }}
+          transition={{ type: "spring", stiffness: 40, damping: 15 }}
+        />
+      </svg>
+    </div>
+  );
+};
+
+// --- COMPONENTE INTERNO: Ítem de la Línea de Tiempo ---
+const TimelineStep = ({ 
+  step, 
+  index, 
+  setActiveStep, 
+  isActive,
+  isStable // Pasamos el estado de estabilidad al ítem
+}: { 
+  step: typeof steps[0], 
+  index: number, 
+  setActiveStep: (idx: number) => void, 
+  isActive: boolean,
+  isStable: boolean
+}) => {
+  const ref = useRef(null);
+  const isInView = useInView(ref, { margin: "-40% 0px -40% 0px" });
+
+  useEffect(() => {
+    if (isInView) setActiveStep(index);
+  }, [isInView, index, setActiveStep]);
+
+  return (
+    <div ref={ref} className="relative py-12 md:py-24 flex gap-6 md:gap-10 opacity-100 group">
+      {/* Línea conectora vertical */}
+      <div className="absolute left-[27px] top-0 bottom-0 w-[2px] bg-white/5 z-0"></div>
+      
+      {/* Línea conectora iluminada */}
+      <motion.div 
+        initial={{ height: 0 }}
+        animate={{ height: isActive ? "100%" : "0%" }}
+        className="absolute left-[27px] top-0 bottom-0 w-[2px] bg-[#00A3FF] z-0 shadow-[0_0_10px_rgba(0,163,255,0.5)]"
+      />
+
+      {/* Círculo / Icono */}
+      <div className="relative z-10 shrink-0">
+        <div className={cn(
+          "w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-500",
+          isActive 
+            ? "bg-[#0A0A0A] border-[#00A3FF] text-[#00A3FF] shadow-[0_0_20px_rgba(0,163,255,0.3)]" 
+            : "bg-[#050505] border-white/10 text-white/30"
+        )}>
+          <step.icon className="w-6 h-6" strokeWidth={isActive ? 2 : 1.5} />
+        </div>
+      </div>
+
+      {/* Contenido del Paso */}
+      <div className={cn(
+        "flex flex-col pt-2 transition-all duration-500 w-full",
+        isActive ? "opacity-100 translate-x-0" : "opacity-40 -translate-x-2"
+      )}>
+        <span className="font-mono text-xs text-[#00A3FF] font-bold tracking-widest mb-3">PASO {step.id}</span>
+        <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+          {step.title}
+        </h3>
+        <p className="text-white/60 text-base leading-relaxed font-medium max-w-md">
+          {step.description}
+        </p>
+        
+        {/* Renderizamos el mini-gráfico SOLO si el paso está activo (para performance) y en pantallas móviles */}
+        {isActive && <MobileMiniChart isStable={isStable} />}
+      </div>
+    </div>
+  );
+};
+
+export default function Metodologia() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  // La lógica es simple: a partir del paso 3 (index 2), consideramos el sistema "Estable"
+  const isStable = activeStep >= 2;
+  const pathColor = isStable ? "#00A3FF" : "#ef4444";
+  const glowColor = isStable ? "rgba(0,163,255,0.4)" : "rgba(239,68,68,0.4)";
+
+  return (
+    <section className="relative bg-[#050505] text-white py-20 border-t border-white/5" id="metodologia">
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl">
+        
+        {/* Encabezado */}
+        <div className="mb-16 md:mb-24 text-left">
+          <div className="inline-flex items-center gap-3 font-mono text-[10px] md:text-xs text-white/70 font-bold tracking-[0.2em] uppercase mb-6 border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-sm">
+            <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse"></span>
+            Proceso de Trabajo
+          </div>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.9]" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+            Ingeniería aplicada a <br className="hidden md:block"/>
+            <span className="text-white/40">tu tranquilidad.</span>
+          </h2>
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 relative">
+          
+          {/* COLUMNA IZQUIERDA: Línea de Tiempo Interactiva */}
+          {/* Reduje el padding inferior en móvil para que no quede tanto espacio vacío */}
+          <div className="flex flex-col relative z-10 pb-12 lg:pb-32">
+            {steps.map((step, index) => (
+              <TimelineStep 
+                key={step.id} 
+                step={step} 
+                index={index} 
+                isActive={activeStep === index} 
+                setActiveStep={setActiveStep}
+                isStable={index >= 2} // Pasamos la lógica al componente hijo
+              />
+            ))}
+          </div>
+
+          {/* COLUMNA DERECHA: Monitor Gráfico Sticky (Solo Desktop) */}
+          {/* Se mantiene hidden en móvil (lg:block), ya que inyectamos el mini-gráfico arriba */}
+          <div className="hidden lg:block relative">
+            <div className="sticky top-40 w-full aspect-[4/3] rounded-xl border border-white/10 bg-[#0A0A0A] p-8 flex flex-col justify-between overflow-hidden shadow-2xl">
+              
+              {/* Header del Monitor */}
+              <div className="flex justify-between items-start z-10">
+                <div>
+                  <h4 className="font-mono text-xs text-white/50 tracking-widest uppercase mb-1">Telemetría en Vivo</h4>
+                  <div className={cn(
+                    "text-2xl font-bold tracking-tighter transition-colors duration-500",
+                    isStable ? "text-[#00A3FF]" : "text-red-500"
+                  )} style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                    {isStable ? "ESTABILIDAD TÉRMICA" : "ANOMALÍA DETECTADA"}
+                  </div>
+                </div>
+                <Activity className={cn(
+                  "w-6 h-6 transition-colors duration-500",
+                  isStable ? "text-[#00A3FF]" : "text-red-500 animate-pulse"
+                )} />
+              </div>
+
+              {/* El Gráfico SVG Reactivo (Desktop) */}
+              <div className="absolute inset-0 flex items-center justify-center p-8 pointer-events-none">
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:2rem_2rem]"></div>
+                
+                <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible" preserveAspectRatio="none">
+<motion.path
+  initial={{ d: isStable ? stablePath : erraticPath }} // <-- AÑADE ESTA LÍNEA
+  d={isStable ? stablePath : erraticPath}
+  fill="transparent"
+                    stroke={glowColor}
+                    strokeWidth="8"
+                    className="blur-md transition-colors duration-700"
+                    animate={{ d: isStable ? stablePath : erraticPath }}
+                    transition={{ type: "spring", stiffness: 40, damping: 15 }}
+                  />
+                 <motion.path
+  initial={{ d: isStable ? stablePath : erraticPath }} // <-- AÑADE ESTA LÍNEA
+  d={isStable ? stablePath : erraticPath}
+  fill="transparent"
+                    stroke={pathColor}
+                    strokeWidth="3"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    animate={{ d: isStable ? stablePath : erraticPath }}
+                    transition={{ type: "spring", stiffness: 40, damping: 15 }}
+                  />
+                </svg>
+              </div>
+
+              {/* Footer del Monitor */}
+              <div className="flex justify-between items-end z-10 font-mono text-[10px] text-white/30 uppercase tracking-widest">
+                <span>Consumo Energético: {isStable ? "ÓPTIMO" : "ELEVADO"}</span>
+                <span>T° {isStable ? "24°C CONSTANTE" : "FLUCTUANTE"}</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="components/sections/PruebaSocial.tsx">
+// src/components/sections/PruebaSocial.tsx
+"use client";
+
+import { Stethoscope, Store, Home, Server, Factory, Building2, Utensils, ShieldCheck } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+// --- COPY HUMANIZADO Y ESTRATÉGICO ---
+// Textos que inspiran alivio y seguridad, no solo "términos de ingeniería".
+const row1 = [
+  { 
+    title: "Clínicas y Hospitales", 
+    desc: "Cuidamos el clima exacto donde se salvan vidas y se preservan medicinas vitales.", 
+    icon: Stethoscope,
+    width: "w-[350px] md:w-[450px]" 
+  },
+  { 
+    title: "Tu Hogar", 
+    desc: "El rigor técnico de la industria, aplicado para el descanso y la tranquilidad de tu familia.", 
+    icon: Home,
+    width: "w-[320px] md:w-[400px]" 
+  },
+  { 
+    title: "Data Centers", 
+    desc: "Refrigeración de precisión. Tu red y servidores nunca se caen por recalentamiento.", 
+    icon: Server,
+    width: "w-[380px] md:w-[480px]" 
+  },
+];
+
+const row2 = [
+  { 
+    title: "Supermercados y Cavas", 
+    desc: "Protegemos tu mercancía. Cero pérdidas económicas por fallas abruptas de frío.", 
+    icon: Store,
+    width: "w-[400px] md:w-[500px]" 
+  },
+  { 
+    title: "Edificios y Oficinas", 
+    desc: "Confort total para tus equipos de trabajo, reduciendo drásticamente el gasto eléctrico mensual.", 
+    icon: Building2,
+    width: "w-[380px] md:w-[460px]" 
+  },
+  { 
+    title: "Garantía Operativa", 
+    desc: "Soporte técnico real y repuestos verificados para que tu negocio no se detenga.", 
+    icon: ShieldCheck,
+    width: "w-[340px] md:w-[420px]" 
+  },
+];
+
+const row3 = [
+  { 
+    title: "Industria y Plantas", 
+    desc: "Procesos ininterrumpidos. Soporte robusto para líneas de producción pesada.", 
+    icon: Factory,
+    width: "w-[360px] md:w-[480px]" 
+  },
+  { 
+    title: "Restaurantes", 
+    desc: "Cadena de frío impecable para que tu cocina fluya sin estrés ni mermas.", 
+    icon: Utensils,
+    width: "w-[320px] md:w-[400px]" 
+  },
+  { 
+    title: "Espacios Críticos", 
+    desc: "Laboratorios y áreas blancas. Control absoluto de la humedad y la temperatura.", 
+    icon: Stethoscope, // Reutilizamos un icono que encaja
+    width: "w-[380px] md:w-[450px]" 
+  },
+];
+
+// Componente de Tarjeta con "Fragmento de Luz" (Iluminación Premium sin bordes duros)
+const Card = ({ item }: { item: any }) => (
+  <div className={cn(
+    "relative flex flex-col justify-center p-8 mx-3 bg-[#0A0A0A] rounded-xl group transition-all duration-500 hover:bg-[#111111]",
+    item.width
+  )}>
+    {/* EL FRAGMENTO DE LUZ: Un destello sutil en el borde superior central */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-[#00A3FF]/40 to-transparent opacity-50 group-hover:opacity-100 transition-opacity duration-500"></div>
+    
+    {/* Reflejo ambiental suave (Glow interior) */}
+    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-1/2 h-12 bg-[#00A3FF]/[0.02] blur-xl rounded-full group-hover:bg-[#00A3FF]/[0.05] transition-colors duration-500"></div>
+
+    <div className="relative z-10 flex flex-col gap-4">
+      <div className="w-10 h-10 rounded-full bg-[#050505] flex items-center justify-center border border-white/5 group-hover:border-[#00A3FF]/30 transition-colors duration-500 shadow-inner">
+        <item.icon className="w-4 h-4 text-white/50 group-hover:text-[#00A3FF] transition-colors duration-500" />
+      </div>
+      <div>
+        <h3 className="text-xl font-bold text-white mb-2 tracking-tight" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+          {item.title}
+        </h3>
+        <p className="text-white/50 text-sm leading-relaxed font-medium group-hover:text-white/70 transition-colors duration-500">
+          {item.desc}
+        </p>
+      </div>
+    </div>
+  </div>
+);
+
+// Pista de movimiento (Track)
+const MarqueeTrack = ({ items, direction = "left", speed = "normal" }: { items: any[], direction?: "left" | "right", speed?: "normal" | "slow" }) => {
+  // Duplicamos el array múltiples veces para asegurar el bucle infinito en pantallas ultra anchas
+  const repeatedItems = [...items, ...items, ...items, ...items];
+  
+  return (
+    <div className="flex overflow-hidden marquee-container w-full py-2">
+      <div className={cn(
+        "flex", 
+        direction === "left" ? "animate-marquee-left" : "animate-marquee-right"
+      )}
+      // Pequeño hack in-line para variar la velocidad si es necesario
+      style={{ animationDuration: speed === "slow" ? '55s' : '45s' }}
+      >
+        {repeatedItems.map((item, idx) => (
+          <Card key={idx} item={item} />
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default function PruebaSocial() {
+  return (
+    <section className="relative py-24 bg-[#050505] overflow-hidden" id="sectores-atendidos">
+      
+      {/* HEADER SEO Y CONTEXTO */}
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl mb-16 text-center">
+        <div className="inline-flex items-center justify-center gap-3 font-mono text-[10px] md:text-xs text-white/60 font-bold tracking-[0.2em] uppercase mb-6 border border-white/5 bg-[#0A0A0A] px-4 py-2 rounded-sm">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
+          Respaldo Integral
+        </div>
+        <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter text-white" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+          Diseñados para <span className="text-[#00A3FF]">proteger tu entorno.</span>
+        </h2>
+        <p className="mt-4 text-white/50 text-sm md:text-base max-w-2xl mx-auto font-medium">
+          Entendemos lo que está en juego. Desde el descanso en tu sala hasta la cadena de frío de tu empresa, nuestro compromiso es que nunca te detengas.
+        </p>
+      </div>
+
+      {/* MURO DE BLOQUES (Masonry Tracks) */}
+      <div className="relative w-full flex flex-col gap-2 -rotate-1 md:-rotate-2 scale-[1.02] md:scale-105">
+        
+        {/* Degradados laterales para fundir el muro con el fondo */}
+        <div className="absolute left-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-r from-[#050505] to-transparent z-20 pointer-events-none"></div>
+        <div className="absolute right-0 top-0 bottom-0 w-16 md:w-48 bg-gradient-to-l from-[#050505] to-transparent z-20 pointer-events-none"></div>
+
+        {/* Las 3 pistas interactuando */}
+        <MarqueeTrack items={row1} direction="left" />
+        {/* La del medio va en sentido contrario y un poco más lento para generar ese desfase orgánico */}
+        <MarqueeTrack items={row2} direction="right" speed="slow" />
+        <MarqueeTrack items={row3} direction="left" />
+        
+      </div>
+
+    </section>
+  );
+}
+</file>
+
+<file path="eslint.config.mjs">
+import { defineConfig, globalIgnores } from "eslint/config";
+import nextVitals from "eslint-config-next/core-web-vitals";
+import nextTs from "eslint-config-next/typescript";
+
+const eslintConfig = defineConfig([
+  ...nextVitals,
+  ...nextTs,
+  // Override default ignores of eslint-config-next.
+  globalIgnores([
+    // Default ignores of eslint-config-next:
+    ".next/**",
+    "out/**",
+    "build/**",
+    "next-env.d.ts",
+  ]),
+]);
+
+export default eslintConfig;
+</file>
+
+<file path="lib/utils.ts">
+// lib/utils.ts
+import { type ClassValue, clsx } from "clsx";
+import { twMerge } from "tailwind-merge";
+
+export function cn(...inputs: ClassValue[]) {
+  return twMerge(clsx(inputs));
+}
+</file>
+
+<file path="public/file.svg">
+<svg fill="none" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M14.5 13.5V5.41a1 1 0 0 0-.3-.7L9.8.29A1 1 0 0 0 9.08 0H1.5v13.5A2.5 2.5 0 0 0 4 16h8a2.5 2.5 0 0 0 2.5-2.5m-1.5 0v-7H8v-5H3v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1M9.5 5V2.12L12.38 5zM5.13 5h-.62v1.25h2.12V5zm-.62 3h7.12v1.25H4.5zm.62 3h-.62v1.25h7.12V11z" clip-rule="evenodd" fill="#666" fill-rule="evenodd"/></svg>
+</file>
+
+<file path="public/globe.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><g clip-path="url(#a)"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1" fill="#666"/></g><defs><clipPath id="a"><path fill="#fff" d="M0 0h16v16H0z"/></clipPath></defs></svg>
+</file>
+
+<file path="public/next.svg">
+<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 394 80"><path fill="#000" d="M262 0h68.5v12.7h-27.2v66.6h-13.6V12.7H262V0ZM149 0v12.7H94v20.4h44.3v12.6H94v21h55v12.6H80.5V0h68.7zm34.3 0h-17.8l63.8 79.4h17.9l-32-39.7 32-39.6h-17.9l-23 28.6-23-28.6zm18.3 56.7-9-11-27.1 33.7h17.8l18.3-22.7z"/><path fill="#000" d="M81 79.3 17 0H0v79.3h13.6V17l50.2 62.3H81Zm252.6-.4c-1 0-1.8-.4-2.5-1s-1.1-1.6-1.1-2.6.3-1.8 1-2.5 1.6-1 2.6-1 1.8.3 2.5 1a3.4 3.4 0 0 1 .6 4.3 3.7 3.7 0 0 1-3 1.8zm23.2-33.5h6v23.3c0 2.1-.4 4-1.3 5.5a9.1 9.1 0 0 1-3.8 3.5c-1.6.8-3.5 1.3-5.7 1.3-2 0-3.7-.4-5.3-1s-2.8-1.8-3.7-3.2c-.9-1.3-1.4-3-1.4-5h6c.1.8.3 1.6.7 2.2s1 1.2 1.6 1.5c.7.4 1.5.5 2.4.5 1 0 1.8-.2 2.4-.6a4 4 0 0 0 1.6-1.8c.3-.8.5-1.8.5-3V45.5zm30.9 9.1a4.4 4.4 0 0 0-2-3.3 7.5 7.5 0 0 0-4.3-1.1c-1.3 0-2.4.2-3.3.5-.9.4-1.6 1-2 1.6a3.5 3.5 0 0 0-.3 4c.3.5.7.9 1.3 1.2l1.8 1 2 .5 3.2.8c1.3.3 2.5.7 3.7 1.2a13 13 0 0 1 3.2 1.8 8.1 8.1 0 0 1 3 6.5c0 2-.5 3.7-1.5 5.1a10 10 0 0 1-4.4 3.5c-1.8.8-4.1 1.2-6.8 1.2-2.6 0-4.9-.4-6.8-1.2-2-.8-3.4-2-4.5-3.5a10 10 0 0 1-1.7-5.6h6a5 5 0 0 0 3.5 4.6c1 .4 2.2.6 3.4.6 1.3 0 2.5-.2 3.5-.6 1-.4 1.8-1 2.4-1.7a4 4 0 0 0 .8-2.4c0-.9-.2-1.6-.7-2.2a11 11 0 0 0-2.1-1.4l-3.2-1-3.8-1c-2.8-.7-5-1.7-6.6-3.2a7.2 7.2 0 0 1-2.4-5.7 8 8 0 0 1 1.7-5 10 10 0 0 1 4.3-3.5c2-.8 4-1.2 6.4-1.2 2.3 0 4.4.4 6.2 1.2 1.8.8 3.2 2 4.3 3.4 1 1.4 1.5 3 1.5 5h-5.8z"/></svg>
+</file>
+
+<file path="public/vercel.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1155 1000"><path d="m577.3 0 577.4 1000H0z" fill="#fff"/></svg>
+</file>
+
+<file path="public/window.svg">
+<svg fill="none" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16"><path fill-rule="evenodd" clip-rule="evenodd" d="M1.5 2.5h13v10a1 1 0 0 1-1 1h-11a1 1 0 0 1-1-1zM0 1h16v11.5a2.5 2.5 0 0 1-2.5 2.5h-11A2.5 2.5 0 0 1 0 12.5zm3.75 4.5a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5M7 4.75a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0m1.75.75a.75.75 0 1 0 0-1.5.75.75 0 0 0 0 1.5" fill="#666"/></svg>
+</file>
+
+<file path="README.md">
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+
+## Getting Started
+
+First, run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+
+## Learn More
+
+To learn more about Next.js, take a look at the following resources:
+
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+</file>
+
+<file path="tailwind.config.ts">
+import type { Config } from "tailwindcss";
+
+const config: Config = {
+  content: [
+    // Aquí le decimos: "Busca en TODAS partes"
+    "./src/**/*.{js,ts,jsx,tsx,mdx}",
+    "./app/**/*.{js,ts,jsx,tsx,mdx}",
+    "./components/**/*.{js,ts,jsx,tsx,mdx}",
+    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
+    
+    // Por si acaso no usas carpeta src:
+    "./*.{js,ts,jsx,tsx,mdx}", 
+  ],
+  theme: {
+    extend: {
+      colors: {
+        industrial: {
+          900: "#050505",
+          800: "#0A0A0A",
+          700: "#121212",
+        },
+        engine: {
+          100: "#E2E8F0",
+          200: "#CBD5E1",
+          DEFAULT: "#94A3B8",
+        },
+        electric: {
+          DEFAULT: "#2563EB", // Azul Eléctrico
+          glow: "#3B82F6",
+        },
+        white: "#F8FAFC",
+      },
+    },
+  },
+  plugins: [],
+};
+export default config;
+</file>
+
+<file path="components/layout/Footer.tsx">
+// src/components/layout/Footer.tsx
+"use client";
+
+import { Activity } from "lucide-react";
+
+export default function Footer() {
+  return (
+    <footer className="relative bg-[#050505] text-white pt-20 pb-8 border-t border-white/5 overflow-hidden">
+      
+      {/* Fondo de Cuadrícula Sutil */}
+      <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:3rem_3rem] pointer-events-none"></div>
+
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
+        
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-20">
+          
+          {/* Marca */}
+          <div className="lg:col-span-2 flex flex-col items-start">
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-10 h-10 rounded-full bg-[#00A3FF] flex items-center justify-center neo-brutal-glow">
+                <Activity className="w-5 h-5 text-black" strokeWidth={3} />
+              </div>
+              <span className="text-2xl font-black tracking-tighter uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Center<span className="text-[#00A3FF]">Service</span>
+              </span>
+            </div>
+            <p className="text-white/50 text-sm max-w-sm font-medium leading-relaxed">
+              Ingeniería térmica de alta precisión. Diseñamos, instalamos y protegemos infraestructuras HVAC en entornos residenciales, comerciales e industriales en Venezuela.
+            </p>
+          </div>
+
+          {/* Links */}
+          <div className="flex flex-col">
+            <h4 className="font-mono text-xs text-[#00A3FF] uppercase tracking-widest font-bold mb-6">Navegación</h4>
+            <ul className="flex flex-col gap-4">
+              <li><a href="#sectores" className="text-white/60 hover:text-white text-sm font-medium transition-colors">Áreas de Operación</a></li>
+              <li><a href="#metodologia" className="text-white/60 hover:text-white text-sm font-medium transition-colors">Proceso Técnico</a></li>
+              <li><a href="#faq" className="text-white/60 hover:text-white text-sm font-medium transition-colors">Base de Conocimiento</a></li>
+            </ul>
+          </div>
+
+          {/* Legal / Contacto */}
+          <div className="flex flex-col">
+            <h4 className="font-mono text-xs text-[#00A3FF] uppercase tracking-widest font-bold mb-6">Soporte</h4>
+            <ul className="flex flex-col gap-4">
+              <li className="text-white/60 text-sm font-medium">Emergencias 24/7</li>
+              <li className="text-white/60 text-sm font-medium">+58 412 000 0000</li>
+              <li className="text-white/60 text-sm font-medium">contacto@centerserviceve.com</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Separador */}
+        <div className="w-full h-[1px] bg-white/10 mb-8"></div>
+
+        {/* Letra pequeña y Sello de Autor */}
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+          <p className="font-mono text-[10px] text-white/40 uppercase tracking-widest text-center md:text-left">
+            © {new Date().getFullYear()} Center Service. Todos los derechos reservados.
+          </p>
+          
+          <div className="flex items-center gap-2 font-mono text-[10px] text-white/30 uppercase tracking-widest">
+            <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+            Sistemas Operativos | <span className="text-white/50">ENG: QUANZOS</span>
+          </div>
+        </div>
+
+      </div>
+    </footer>
+  );
+}
+</file>
+
+<file path="components/layout/Navbar.tsx">
+// src/components/layout/Navbar.tsx
+"use client";
+
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Activity } from "lucide-react";
+import { cn } from "@/lib/utils";
+
+const navLinks = [
+  { name: "Sectores", href: "#sectores" },
+  { name: "Metodología", href: "#metodologia" },
+  { name: "FAQ", href: "#faq" },
+];
+
+export default function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  // Detectar scroll para oscurecer un poco más el fondo al bajar
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 50);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  return (
+    // Contenedor fixed con un margen superior (top-4) para que flote
+    <header className="fixed top-4 inset-x-0 z-50 flex justify-center px-4 md:px-6 pointer-events-none">
+      
+      <div className={cn(
+        "relative w-full max-w-6xl flex items-center justify-between px-4 md:px-8 py-3 md:py-4 rounded-full transition-all duration-500 pointer-events-auto border",
+        scrolled 
+          ? "bg-[#0A0A0A]/90 backdrop-blur-xl border-white/10 shadow-[0_10px_40px_rgba(0,0,0,0.5)]" 
+          : "bg-[#050505]/50 backdrop-blur-md border-white/5"
+      )}>
+        
+        {/* LOGO */}
+        <a href="#" className="flex items-center gap-2 group relative z-50">
+          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:scale-95 transition-transform duration-300">
+            <Activity className="w-4 h-4 text-black" strokeWidth={3} />
+          </div>
+          <span className="text-white font-black text-lg tracking-tighter uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+            Center<span className="text-[#00A3FF]">Service</span>
+          </span>
+        </a>
+
+        {/* DESKTOP LINKS */}
+        <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
+          {navLinks.map((link) => (
+            <a 
+              key={link.name} 
+              href={link.href}
+              className="text-xs font-mono uppercase tracking-widest text-white/60 hover:text-white transition-colors duration-300"
+              style={{ fontFamily: 'var(--font-jetbrains), monospace' }}
+            >
+              {link.name}
+            </a>
+          ))}
+        </nav>
+
+        {/* CTA DESKTOP */}
+        <a 
+          href="#contacto"
+          className="hidden md:flex items-center justify-center px-6 py-2.5 bg-[#00A3FF] text-black font-bold text-xs uppercase tracking-widest rounded-full hover:bg-white transition-all duration-300 neo-brutal-glow"
+          style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}
+        >
+          Emergencias
+        </a>
+
+        {/* BOTÓN HAMBURGUESA MÓVIL (Animado) */}
+        <button 
+          onClick={() => setIsOpen(!isOpen)}
+          className="md:hidden relative z-50 w-10 h-10 flex flex-col items-center justify-center gap-[5px] rounded-full bg-white/5 border border-white/10"
+        >
+          <motion.span 
+            animate={isOpen ? { rotate: 45, y: 7 } : { rotate: 0, y: 0 }} 
+            className="w-4 h-[2px] bg-white block transition-all" 
+          />
+          <motion.span 
+            animate={isOpen ? { opacity: 0 } : { opacity: 1 }} 
+            className="w-4 h-[2px] bg-white block transition-all" 
+          />
+          <motion.span 
+            animate={isOpen ? { rotate: -45, y: -7 } : { rotate: 0, y: 0 }} 
+            className="w-4 h-[2px] bg-white block transition-all" 
+          />
+        </button>
+
+        {/* MENÚ DESPLEGABLE MÓVIL */}
+        <AnimatePresence>
+          {isOpen && (
+            <motion.div
+              initial={{ opacity: 0, y: -20, scale: 0.95 }}
+              animate={{ opacity: 1, y: 0, scale: 1 }}
+              exit={{ opacity: 0, y: -10, scale: 0.95 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute top-[110%] left-0 w-full bg-[#0A0A0A] border border-white/10 rounded-3xl p-6 flex flex-col shadow-2xl overflow-hidden"
+            >
+              <div className="flex flex-col gap-2">
+                {navLinks.map((link, i) => (
+                  <motion.a
+                    initial={{ opacity: 0, x: -10 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.1 }}
+                    key={link.name}
+                    href={link.href}
+                    onClick={() => setIsOpen(false)}
+                    className="text-2xl font-bold text-white py-4 border-b border-white/5 uppercase tracking-tighter"
+                    style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}
+                  >
+                    {link.name}
+                  </motion.a>
+                ))}
+                
+                <motion.a
+                   initial={{ opacity: 0, x: -10 }}
+                   animate={{ opacity: 1, x: 0 }}
+                   transition={{ delay: 0.3 }}
+                   href="#contacto"
+                   onClick={() => setIsOpen(false)}
+                   className="mt-6 w-full py-4 bg-[#00A3FF] text-black font-bold text-sm uppercase tracking-widest rounded-full text-center neo-brutal-glow"
+                   style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}
+                >
+                  Reportar Emergencia
+                </motion.a>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </div>
+    </header>
+  );
+}
+</file>
+
+<file path="components/sections/Sectores.tsx">
+// src/components/sections/Sectores.tsx
+"use client";
+
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { ArrowUpRight } from "lucide-react";
+import Image from "next/image"; // ⚡ IMPORTACIÓN CRÍTICA PARA RENDIMIENTO
+
+// --- DATA DEL CLIENTE INTEGRADA AL NUEVO DISEÑO ---
+const sectors = [
+  {
+    id: "01",
+    title: "REFRIGERACIÓN COMERCIAL E INDUSTRIAL",
+    subtitle: "COD: IND-HVAC",
+    description: "Mantenimiento preventivo y correctivo a vitrinas exhibidoras, máquinas de hielo, cuartos fríos, túneles de congelación y torres de enfriamiento. Protocolos de parada técnica.",
+    image: "/images/services/foto1 (5).webp",
+    tags: ["Cuartos Fríos", "Torres de Enfriamiento", "Túneles de Congelación"]
+  },
+  {
+    id: "02",
+    title: "CLIMATIZACIÓN INTEGRAL",
+    subtitle: "COD: COM-VRF",
+    description: "Mantenimiento preventivo y correctivo desde unidades tipo split residencial hasta equipos VRF/VRV, sistemas de precisión y edificios corporativos, chillers y ambientes críticos.",
+    image: "/images/services/foto1 (2).webp",
+    tags: ["Equipos VRF/VRV", "Chillers", "Sistemas de Precisión"]
+  },
+  {
+    id: "03",
+    title: "AUTOMATIZACIÓN INTELIGENTE",
+    subtitle: "COD: SYS-AUTO",
+    description: "Monitoreo remoto y control inteligente de temperatura en tiempo real. Gestión centralizada para garantizar continuidad operativa y eficiencia.",
+    image: "/images/services/foto1 (3).webp",
+    tags: ["Monitoreo Remoto", "Control BMS", "Tiempo Real"]
+  },
+  {
+    id: "04",
+    title: "PROYECTOS DE INGENIERÍA",
+    subtitle: "COD: ENG-AUDIT",
+    description: "Proyectos HVAC integrales. Cálculo de carga térmica, selección de equipos, unidades manejadoras de aire y cumplimiento estricto de normativas ASHRAE.",
+    image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2670&auto=format&fit=crop",
+    tags: ["Cálculo Térmico", "Selección de Equipos", "Normas ASHRAE"]
+  }
+];
+
+export default function Sectores() {
+  const [activeIndex, setActiveIndex] = useState<number | null>(0);
+
+  return (
+    <section className="relative py-24 md:py-40 bg-[#050505] text-white border-t border-white/5" id="sectores">
+      <div className="container mx-auto px-6 md:px-12 max-w-7xl">
+        
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
+          
+          {/* COLUMNA IZQUIERDA: Header Sticky */}
+          {/* Añadimos gpu-accelerated para que el sticky no cause repaints costosos */}
+          <div className="lg:col-span-4 flex flex-col items-start lg:sticky lg:top-32 h-fit gpu-accelerated">
+            <motion.div 
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+            >
+              <div className="inline-flex items-center gap-3 font-mono text-[10px] md:text-xs text-white/70 font-bold tracking-[0.2em] uppercase mb-6 border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-sm backdrop-blur-md">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
+                Capacidad Instalada
+              </div>
+              
+              <h2 className="text-4xl md:text-5xl lg:text-6xl font-black tracking-tighter uppercase leading-[0.9]" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Soluciones de<br />
+                <span className="text-[#00A3FF]">Alto Rendimiento.</span>
+              </h2>
+              
+              <p className="mt-6 text-white/50 font-medium text-sm md:text-base max-w-sm leading-relaxed">
+                Desplegamos ingeniería especializada y protocolos técnicos rigurosos para garantizar la estabilidad térmica de sus operaciones críticas.
+              </p>
+            </motion.div>
+          </div>
+
+          {/* COLUMNA DERECHA: Acordeón Interactivo */}
+          <div className="lg:col-span-8 flex flex-col border-t border-white/10">
+            {sectors.map((sector, index) => {
+              const isActive = activeIndex === index;
+
+              return (
+                <motion.div 
+                  key={sector.id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, margin: "-50px" }}
+                  transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
+                  className="border-b border-white/10 flex flex-col gpu-accelerated"
+                >
+                  {/* BOTÓN DEL ACORDEÓN */}
+                  <button 
+                    onClick={() => setActiveIndex(isActive ? null : index)}
+                    className="w-full py-8 md:py-12 flex items-center justify-between group text-left focus:outline-none"
+                    aria-expanded={isActive}
+                  >
+                    <div className="flex items-baseline gap-4 md:gap-8 pr-4">
+                      <span className={`font-mono text-sm md:text-lg font-medium transition-colors duration-300 ${isActive ? 'text-[#00A3FF]' : 'text-white/20 group-hover:text-[#00A3FF]'}`}>
+                        {sector.id}
+                      </span>
+                      <h3 className="text-2xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-white uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                        {sector.title}
+                      </h3>
+                    </div>
+                    
+                    <motion.div 
+                      animate={{ rotate: isActive ? 45 : 0 }}
+                      className={`w-8 h-8 md:w-10 md:h-10 rounded-full border flex items-center justify-center transition-colors duration-300 shrink-0 ${isActive ? 'border-[#00A3FF] text-[#00A3FF] shadow-[0_0_15px_rgba(0,163,255,0.2)]' : 'border-white/20 text-white/50 group-hover:border-[#00A3FF] group-hover:text-[#00A3FF]'}`}
+                    >
+                      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5" />
+                    </motion.div>
+                  </button>
+
+                  {/* CONTENIDO EXPANDIBLE */}
+                  <AnimatePresence initial={false}>
+                    {isActive && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: "auto", opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }} // Ligeramente más rápido para que no haya lag
+                        className="overflow-hidden"
+                      >
+                        <div className="pb-12 pt-2 flex flex-col md:flex-row gap-8 md:gap-12 pl-0 md:pl-16 md:pr-4">
+                          
+                          {/* Info del Sector */}
+                          <div className="flex-1 flex flex-col justify-between">
+                            <div>
+                              <h4 className="font-mono text-xs uppercase tracking-widest text-[#00A3FF] font-bold mb-3">
+                                {sector.subtitle}
+                              </h4>
+                              <p className="text-white/60 font-medium leading-relaxed mb-6">
+                                {sector.description}
+                              </p>
+                            </div>
+                            
+                            {/* Tags Dinámicos */}
+                            <div className="flex flex-wrap gap-2 mt-auto">
+                              {sector.tags.map((tag, i) => (
+                                <span key={i} className="px-3 py-1 bg-white/5 text-white/60 font-mono text-[10px] uppercase tracking-wider border border-white/5">
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                          </div>
+
+                          {/* IMAGEN ULTRA-OPTIMIZADA CON NEXT/IMAGE */}
+                          {/* Envolvemos en un contenedor relative con aspect ratio forzado */}
+                          <div className="w-full md:w-5/12 aspect-[4/3] md:aspect-square bg-[#0A0A0A] overflow-hidden relative group border border-white/5 gpu-accelerated rounded-sm">
+                            
+                           <Image 
+  src={sector.image} 
+  alt={`Servicio ${sector.title}`}
+  fill
+  sizes="(max-width: 768px) 100vw, 33vw" 
+  className="object-cover filter grayscale opacity-60 contrast-125 transition-all duration-700 ease-out group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105"
+/>
+                            <div className="absolute inset-0 bg-black/40 group-hover:bg-black/0 transition-colors duration-500 pointer-events-none"></div>
+                          </div>
+
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+
+                </motion.div>
+              );
+            })}
+          </div>
+
+        </div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="next.config.ts">
+import type { NextConfig } from "next";
+
+const nextConfig: NextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "images.unsplash.com",
+      },
+    ],
+  },
+};
+
+export default nextConfig;
+</file>
+
+<file path="postcss.config.mjs">
+/** @type {import('postcss-load-config').Config} */
+const config = {
+  plugins: {
+    '@tailwindcss/postcss': {}, // <--- ESTO ES LO QUE CAMBIA
+    autoprefixer: {},
+  },
+};
+
+export default config;
+</file>
+
+<file path="tsconfig.json">
+{
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "react-jsx",
+    "incremental": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    "paths": {
+      "@/*": [
+        "./*"
+      ]
+    },
+    "target": "ES2017"
+  },
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+</file>
+
+<file path="components/sections/Hero.tsx">
+// src/components/sections/Hero.tsx
+"use client";
+
+import React, { useRef } from "react";
+import { motion } from "framer-motion";
+import { ArrowUpRight, Activity, ThermometerSun } from "lucide-react";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { Float } from "@react-three/drei";
+import type { Mesh } from "three";
+
+// --- 1. COMPONENTE 3D: EL OBJETO ---
+function IndustrialCore() {
+  const meshRef = useRef<Mesh>(null);
+
+  useFrame((state, delta) => {
+    if (meshRef.current) {
+      // Movimiento lento y controlado para mantener la elegancia
+      meshRef.current.rotation.x += delta * 0.1;
+      meshRef.current.rotation.y += delta * 0.15;
+    }
+  });
+
+  return (
+    <Float speed={1.5} rotationIntensity={0.5} floatIntensity={2}>
+      <mesh ref={meshRef} scale={1.8}>
+        {/* Geometría suave pero ligera (32x64) perfecta para mantener 60 FPS constants */}
+        <torusGeometry args={[2, 0.6, 32, 64]} />
+        {/* Usamos meshStandardMaterial: Es el material físico nativo más robusto. 
+          Usamos un color gris plomo (#1a1a1a) para que el aro se note y reciba form light.
+        */}
+        <meshStandardMaterial 
+          color="#1a1a1a" // Un gris plomo para que el aro se note y no se pierda en el fondo negro
+          roughness={0.2} 
+          metalness={0.9} 
+        />
+      </mesh>
+    </Float>
+  );
+}
+
+// --- 2. EL ESCUDO: CANVAS MEMOIZADO (FOCO ATMOSFÉRICO NEO-BRUTALISTA) ---
+// React.memo evita re-renderizados innecesarios y protege el contexto WebGL.
+const Background3D = React.memo(() => {
+  return (
+    // Contenedor principal con un margen superior (top-4) para que flote
+    <div className="absolute inset-0 z-0 opacity-80 pointer-events-none mix-blend-screen gpu-accelerated overflow-hidden">
+      
+      {/* CAPA DE DEGRADADO CSS (OPTIMIZADA): Foco azul atmosférico que se desvanece por completo */}
+      <div 
+        className="absolute inset-0 z-0"
+        style={{ background: 'linear-gradient(180deg, rgba(0, 163, 255, 0.8) 0%, rgba(0, 163, 255, 0.2) 20%, rgba(0, 0, 0, 0) 40%)' }}
+      ></div>
+
+      <div className="absolute inset-0 z-10">
+        <Canvas 
+          camera={{ position: [0, 0, 8], fov: 45 }}
+          dpr={[1, 1.5]} 
+          // Configuraciones críticas para la estabilidad del WebGL
+          gl={{ antialias: false, powerPreference: "high-performance", alpha: true, stencil: false, depth: false }} 
+        >
+          {/* Iluminación Focal Azul Potente desde Arriba */}
+          <ambientLight intensity={0.5} />
+          {/* Luces direccionales blancas/grises para dar forma y brillo al aro metálico */}
+          <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
+          <directionalLight position={[-10, -10, -5]} intensity={1} color="#ffffff" />
+          
+          <IndustrialCore />
+        </Canvas>
+      </div>
+    </div>
+  );
+});
+
+// Nombrar el componente memoizado es buena práctica para las herramientas de desarrollo de React
+Background3D.displayName = "Background3D";
+
+
+// --- 3. COMPONENTE PRINCIPAL: HERO ---
+export default function Hero() {
+  const EASE_ELITE = [0.16, 1, 0.3, 1] as const;
+
+  const textRevealVariants = {
+    hidden: { y: "100%", opacity: 0, rotate: 2 },
+    visible: { y: "0%", opacity: 1, rotate: 0, transition: { duration: 1.2, ease: EASE_ELITE } },
+  };
+
+  return (
+    <section className="relative min-h-screen flex items-center bg-[#050505] text-white overflow-hidden selection:bg-[#00A3FF] selection:text-white">
+      
+      {/* INYECTAMOS EL CANVAS PROTEGIDO Y ATMOSFÉRICO AQUÍ */}
+      <Background3D />
+
+      {/* --- CONTENIDO PRINCIPAL --- */}
+      <div className="container mx-auto px-6 md:px-12 relative z-10 w-full pt-24 pb-12">
+        
+        <motion.div 
+          initial="hidden"
+          animate="visible"
+          transition={{ staggerChildren: 0.1 }}
+          className="flex flex-col items-start md:items-center text-left md:text-center w-full max-w-6xl mx-auto"
+        >
+          
+          <motion.div variants={{ hidden: { opacity: 0, y: 10 }, visible: { opacity: 1, y: 0, transition: { duration: 1, ease: EASE_ELITE } } }} className="mb-8">
+            <div className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-white/80 font-medium tracking-[0.2em] uppercase border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-none backdrop-blur-md shadow-[0_0_15px_rgba(0,163,255,0.05)]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
+              <span><span className="text-white/30 mr-2">1 [INFO]</span> Ingeniería Térmica</span>
+            </div>
+          </motion.div>
+
+          <div className="flex flex-col mb-8 w-full">
+            <div className="overflow-hidden">
+              <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Cero margen
+              </motion.h1>
+            </div>
+            <div className="overflow-hidden">
+              <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white/30 uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                de error.
+              </motion.h1>
+            </div>
+            <div className="overflow-hidden mt-1 md:mt-2">
+              <motion.h1 variants={textRevealVariants} className="text-4xl sm:text-5xl lg:text-[80px] font-bold tracking-tight leading-[0.9] text-[#00A3FF] uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+                Continuidad absoluta.
+              </motion.h1>
+            </div>
+          </div>
+
+          <div className="overflow-hidden w-full max-w-2xl mb-12">
+            <motion.p variants={textRevealVariants} className="text-base md:text-xl text-white/60 leading-relaxed font-medium">
+              Diseñamos e instalamos infraestructuras HVAC y de refrigeración comercial. 
+              Garantizamos la estabilidad térmica de data centers, quirófanos y plantas industriales donde una parada técnica, sin importar las condiciones externas, <span className="text-white font-bold">no es una opción</span>.
+            </motion.p>
+          </div>
+
+          <motion.div variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3, ease: EASE_ELITE } } }} className="flex w-full justify-start md:justify-center mb-16">
+            <button className="group relative px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-xs md:text-sm uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-3 hover:bg-gray-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)]" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
+              <span className="relative z-10 flex items-center gap-2">
+                Agendar Inspección 
+                <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+              </span>
+            </button>
+          </motion.div>
+
+          <motion.div variants={{ hidden: { opacity: 0 }, visible: { opacity: 1, transition: { duration: 1, delay: 0.5 } } }} className="w-full flex flex-row gap-8 md:gap-16 justify-start md:justify-center border-t border-white/10 pt-8">
+            <div className="flex flex-col items-start md:items-center font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              <span className="flex items-center gap-2 text-white text-lg md:text-xl font-bold">
+                <Activity className="w-4 h-4 md:w-5 md:h-5 text-[#00A3FF]" /> 24/7
+              </span>
+              <span className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest mt-1">Soporte Crítico</span>
+            </div>
+            <div className="flex flex-col items-start md:items-center font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
+              <span className="flex items-center gap-2 text-white text-lg md:text-xl font-bold">
+                <ThermometerSun className="w-4 h-4 md:w-5 md:h-5 text-[#00A3FF]" /> Exactitud
+              </span>
+              <span className="text-white/40 text-[10px] md:text-xs uppercase tracking-widest mt-1">Normativa ASHRAE</span>
+            </div>
+          </motion.div>
+
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+</file>
+
+<file path="package.json">
+{
+  "name": "center-service",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "eslint"
+  },
+  "dependencies": {
+    "@react-three/drei": "^10.7.7",
+    "@react-three/fiber": "^9.5.0",
+    "clsx": "^2.1.1",
+    "embla-carousel-autoplay": "^8.6.0",
+    "embla-carousel-react": "^8.6.0",
+    "framer-motion": "^12.36.0",
+    "lenis": "^1.3.17",
+    "lucide-react": "^0.562.0",
+    "next": "16.1.3",
+    "react": "19.2.3",
+    "react-dom": "19.2.3",
+    "tailwind-merge": "^3.4.0"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^20",
+    "@types/react": "^19",
+    "@types/react-dom": "^19",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^9",
+    "eslint-config-next": "16.1.3",
+    "tailwindcss": "^4",
+    "typescript": "^5"
+  }
+}
+</file>
+
+<file path="app/globals.css">
+/* app/globals.css */
+
+/* 1. La única directiva necesaria para Tailwind v4 */
+@import "tailwindcss";
+
+/* 2. Definición de variables CSS para fuentes (coinciden con el Layout) */
+:root {
+  --font-space-grotesk: 'Space Grotesk', sans-serif;
+  --font-jetbrains: 'JetBrains Mono', monospace;
+}
+
+/* 3. Textura global (Noise para Dark Mode) */
+/* app/globals.css */
+
+
+.noise-overlay {
+  background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+  opacity: 0.05; /* Un poco más alto para compensar la falta de overlay */
+  pointer-events: none;
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  /* La magia del rendimiento: obliga al navegador a tratar esto como su propia capa GPU */
+  transform: translateZ(0); 
+  will-change: transform;
+}
+
+/* 2. CLASE DE UTILIDAD: Para elementos que usan Framer Motion */
+.gpu-accelerated {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  perspective: 1000px;
+}
+
+/* 4. Ocultar scrollbar nativa para SmoothScroll */
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}
+
+/* 5. EFECTO NEO-BRUTALISTA: Glow duro para elementos activos */
+.neo-brutal-glow {
+  box-shadow: 0 0 25px rgba(0, 163, 255, 0.4); 
+}
+/* Animaciones para el Muro de Confianza (Masonry Marquee) */
+@keyframes marquee-left {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes marquee-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+.animate-marquee-left {
+  animation: marquee-left 45s linear infinite;
+  width: max-content;
+}
+
+.animate-marquee-right {
+  animation: marquee-right 45s linear infinite;
+  width: max-content;
+}
+
+/* Pausa elegante al interactuar */
+.marquee-container:hover .animate-marquee-left,
+.marquee-container:hover .animate-marquee-right {
+  animation-play-state: paused;
+}
+</file>
+
+<file path="app/layout.tsx">
+import type { Metadata } from "next";
+import { Inter, Space_Grotesk, JetBrains_Mono } from "next/font/google"; // <--- Importamos las nuevas fuentes
+import "./globals.css";
+import { cn } from "@/lib/utils";
+import SmoothScroll from "@/components/providers/SmoothScroll";
+
+// 1. Instanciamos las fuentes de Google
+const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
+const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space-grotesk" });
+const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
+
+export const metadata: Metadata = {
+  title: "Center Service | Ingeniería Térmica y Climatización en Venezuela",
+  description: "Líderes en climatización industrial, comercial y doméstica. Garantizamos continuidad operativa sin margen de error.",
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    // 2. Inyectamos las variables de fuente en el HTML
+    <html lang="es" className={`${spaceGrotesk.variable} ${jetBrainsMono.variable} ${inter.variable} scroll-smooth`}>
+      {/* 3. LIMPIEZA TOTAL: Eliminamos bg-industrial-900.
+        Aplicamos fondo asfalto (#050505), texto blanco y selección cyan.
+      */}
+      <body className={cn(
+        inter.className, 
+        "antialiased bg-[#050505] text-white selection:bg-[#00A3FF] selection:text-white"
+      )}>
+        
+        {/* Capa de textura global */}
+        <div className="noise-overlay"></div>
+
+        <SmoothScroll>
+          {children}
+        </SmoothScroll>
+        
+      </body>
+    </html>
+  );
+}
+</file>
+
+<file path="app/page.tsx">
+import Navbar from "@/components/layout/Navbar";
+
+
+import Hero from "@/components/sections/Hero";
+
+import Sectores from "@/components/sections/Sectores";
+import Metodologia from "@/components/sections/Metodologia";
+import PruebaSocial from "@/components/sections/PruebaSocial";
+import Faq from "@/components/sections/Faq"
+import Contacto from "@/components/sections/Contacto"
+import Footer from "@/components/layout/Footer"
+
+export default function Home() {
+  return (
+    <main className="bg-industrial-900 min-h-screen selection:bg-electric selection:text-white flex flex-col">
+      <Navbar />
+      
+      {/* SECCIONES PRINCIPALES */}
+      <Hero />
+      <Sectores/>
+      <Metodologia/>
+      <PruebaSocial/>
+      <Faq/>
+      <Contacto/>
+      <Footer/>
+   
+      
+    
+    </main>
+  );
+}
+</file>
+
+</files>

@@ -10,22 +10,19 @@ import Faq from "@/components/sections/Faq"
 import Contacto from "@/components/sections/Contacto"
 import Footer from "@/components/layout/Footer"
 
-export default function Home() {
+
+   export default function Home() {
   return (
-    <main className="bg-industrial-900 min-h-screen selection:bg-electric selection:text-white flex flex-col">
+    // Quitamos 'bg-industrial-900', el fondo negro lo provee el layout y el fluido
+    <main className="min-h-screen flex flex-col relative z-10">
       <Navbar />
-      
-      {/* SECCIONES PRINCIPALES */}
       <Hero />
-      <Sectores/>
-      <Metodologia/>
-      <PruebaSocial/>
-      <Faq/>
-      <Contacto/>
-      <Footer/>
-   
-      
-    
+      <Sectores />
+      <Metodologia />
+      <PruebaSocial />
+      <Faq />
+      <Contacto />
+      <Footer />
     </main>
   );
 }

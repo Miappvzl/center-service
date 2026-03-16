@@ -145,7 +145,7 @@ export default function Metodologia() {
   const glowColor = isStable ? "rgba(0,163,255,0.4)" : "rgba(239,68,68,0.4)";
 
   return (
-    <section className="relative bg-[#050505] text-white py-20 border-t border-white/5" id="metodologia">
+    <section className="relative  text-white py-20 border-t border-white/5" id="metodologia">
       <div className="container mx-auto px-6 md:px-12 max-w-7xl">
         
         {/* Encabezado */}
