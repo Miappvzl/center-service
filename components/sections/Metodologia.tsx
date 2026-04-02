@@ -2,11 +2,11 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { motion, useInView } from "framer-motion";
+import { motion, useInView, AnimatePresence } from "framer-motion";
 import { Search, FileCheck, Wrench, ShieldCheck, Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// --- COPY ESTRATÉGICO ---
+// --- COPY ESTRATÉGICO (Mantenemos tu gran copy) ---
 const steps = [
   {
     id: "01",
@@ -33,51 +33,93 @@ const steps = [
     icon: ShieldCheck,
   }
 ];
+// --- RUTAS DEL GRÁFICO (ESTÉTICA DE OSCILOSCOPIO DE ALTA GAMA) ---
+// 4 segmentos de Bézier fluidos que ocupan todo el espectro visual.
+const erraticStrokePath = "M 0 50 C 10 15 15 85 25 50 C 35 15 45 95 55 50 C 65 5 75 85 85 50 C 90 30 95 70 100 50";
+const erraticLinePath = erraticStrokePath + " L 100 100 L 0 100 Z";
 
-// --- RUTAS DEL GRÁFICO (Reutilizables) ---
-const erraticPath = "M 0 50 Q 10 10 20 60 T 40 20 T 60 80 T 80 10 T 100 50";
-const stablePath = "M 0 50 Q 25 50 50 50 T 100 50";
+const stableStrokePath = "M 0 50 C 10 50 15 50 25 50 C 35 50 45 50 55 50 C 65 50 75 50 85 50 C 90 50 95 50 100 50";
+const stableLinePath = stableStrokePath + " L 100 100 L 0 100 Z";
+// --- DEFINICIONES DE LUMINISCENCIA (SVG DEFS) ---
+// Creamos una degradado para el área bajo la línea
+const GraphDefs = ({ id_prefix }: { id_prefix: string }) => (
+  <defs>
+    <linearGradient id={`${id_prefix}-gradient-area`} x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stopColor="var(--stop-color)" stopOpacity="0.3" />
+      <stop offset="100%" stopColor="var(--stop-color)" stopOpacity="0.01" />
+    </linearGradient>
+  </defs>
+);
 
-// --- MICRO-GRÁFICO PARA MÓVILES ---
-// Este componente se muestra debajo del texto en teléfonos
+// --- MICRO-GRÁFICO PARA MÓVILES (AMPLIADO Y DETALLADO) ---
 const MobileMiniChart = ({ isStable }: { isStable: boolean }) => {
   const pathColor = isStable ? "#00A3FF" : "#ef4444";
+  const stopColor = isStable ? "#00A3FF" : "#ef4444";
   
   return (
-    <div className="lg:hidden mt-6 h-16 w-full rounded-md border border-white/5 bg-[#0A0A0A] p-2 flex items-center relative overflow-hidden">
-      {/* Etiqueta de estado en miniatura */}
-      <div className="absolute top-2 left-2 flex items-center gap-1 z-10">
-         <Activity className={cn("w-3 h-3", isStable ? "text-[#00A3FF]" : "text-red-500 animate-pulse")} />
-         <span className="font-mono text-[8px] uppercase text-white/40 tracking-widest">
-            {isStable ? "ESTABILIZADO" : "ANOMALÍA TÉRMICA"}
-         </span>
+    // Altura aumentada a h-28 y shadow-inner para mayor profundidad
+    <div className="lg:hidden mt-8 h-28 w-full rounded-xl border border-white/5 bg-[#080808] p-4 flex flex-col relative overflow-hidden shadow-[inset_0_2px_10px_rgba(0,0,0,0.5)]">
+      
+      {/* Etiqueta de estado superior */}
+      <div className="flex w-full justify-between items-center z-20">
+          <div className="flex items-center gap-1.5">
+            <Activity className={cn("w-3.5 h-3.5", isStable ? "text-[#00A3FF]" : "text-red-500 animate-pulse")} />
+            <span className="font-mono text-[10px] uppercase text-white/60 tracking-widest font-bold">
+               {isStable ? "ESTABILIZADO" : "ANOMALÍA DETECTADA"}
+            </span>
+          </div>
+          <span className="font-mono text-[10px] uppercase text-white/30 tracking-widest">T° {isStable ? "24.0°C" : "ERR"}</span>
       </div>
       
-      {/* Vector SVG */}
-      <svg viewBox="0 0 100 100" className="w-full h-full opacity-80" preserveAspectRatio="none">
-       <motion.path
-  initial={{ d: isStable ? stablePath : erraticPath }} // <-- AÑADE ESTA LÍNEA
-  d={isStable ? stablePath : erraticPath}
-  fill="transparent"
-          stroke={pathColor}
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-          animate={{ d: isStable ? stablePath : erraticPath }}
-          transition={{ type: "spring", stiffness: 40, damping: 15 }}
-        />
-      </svg>
+      {/* Rejilla de telemetría de fondo (Textura Premium) */}
+      <div className="absolute inset-0 top-10 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:1rem_1rem] opacity-50 z-0"></div>
+
+      {/* Contenedor del SVG que empuja hacia abajo para no tapar el texto */}
+      <div className="absolute inset-0 top-8 left-0 right-0 bottom-0 z-10 flex items-end">
+        <svg 
+          viewBox="0 0 100 100" 
+          className="w-full h-full opacity-90 overflow-visible" 
+          preserveAspectRatio="none" // <-- VITAL para que la línea ocupe todo el ancho del celular
+          style={{ '--stop-color': stopColor } as React.CSSProperties}
+        >
+          <GraphDefs id_prefix="mobile" />
+
+          {/* Capa de Sustancia (Área) */}
+          <motion.path
+            initial={{ d: isStable ? stableLinePath : erraticLinePath }}
+            d={isStable ? stableLinePath : erraticLinePath}
+            fill={`url(#mobile-gradient-area)`}
+            animate={{ d: isStable ? stableLinePath : erraticLinePath }}
+            transition={{ type: "tween", duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          />
+
+          {/* Capa Principal (Línea con grosor adaptado a móvil) */}
+          <motion.path
+            initial={{ d: isStable ? stableStrokePath : erraticStrokePath }}
+            d={isStable ? stableStrokePath : erraticStrokePath}
+            fill="transparent"
+            stroke={pathColor}
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            // Filtro drop-shadow CSS para dar brillo de neón sin sobrecargar el DOM móvil con más nodos
+            style={{ filter: `drop-shadow(0px 0px 6px ${isStable ? 'rgba(0,163,255,0.6)' : 'rgba(239,68,68,0.6)'})` }}
+            animate={{ d: isStable ? stableStrokePath : erraticStrokePath }}
+            transition={{ type: "tween", duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+          />
+        </svg>
+      </div>
     </div>
   );
 };
 
-// --- COMPONENTE INTERNO: Ítem de la Línea de Tiempo ---
+// --- COMPONENTE INTERNO: Ítem de la Línea de Tiempo (Optimizado para SEO) ---
 const TimelineStep = ({ 
   step, 
   index, 
   setActiveStep, 
   isActive,
-  isStable // Pasamos el estado de estabilidad al ítem
+  isStable 
 }: { 
   step: typeof steps[0], 
   index: number, 
@@ -93,7 +135,8 @@ const TimelineStep = ({
   }, [isInView, index, setActiveStep]);
 
   return (
-    <div ref={ref} className="relative py-12 md:py-24 flex gap-6 md:gap-10 opacity-100 group">
+    // CAMBIO CLAVE SEO: Usamos <li> para semántica SEO
+    <li ref={ref} className="relative py-12 md:py-24 flex gap-6 md:gap-10 opacity-100 group list-none">
       {/* Línea conectora vertical */}
       <div className="absolute left-[27px] top-0 bottom-0 w-[2px] bg-white/5 z-0"></div>
       
@@ -110,7 +153,7 @@ const TimelineStep = ({
           "w-14 h-14 rounded-full flex items-center justify-center border-2 transition-all duration-500",
           isActive 
             ? "bg-[#0A0A0A] border-[#00A3FF] text-[#00A3FF] shadow-[0_0_20px_rgba(0,163,255,0.3)]" 
-            : "bg-[#050505] border-white/10 text-white/30"
+            : "bg-[#050505] border-white/10 text-white/50" // <- Mejorado el contraste para accesibilidad
         )}>
           <step.icon className="w-6 h-6" strokeWidth={isActive ? 2 : 1.5} />
         </div>
@@ -125,14 +168,14 @@ const TimelineStep = ({
         <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 tracking-tight" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
           {step.title}
         </h3>
-        <p className="text-white/60 text-base leading-relaxed font-medium max-w-md">
+        <p className="text-white/60 text-base leading-relaxed font-medium max-w-md mb-2">
           {step.description}
         </p>
         
-        {/* Renderizamos el mini-gráfico SOLO si el paso está activo (para performance) y en pantallas móviles */}
+        {/* Renderizamos el mini-gráfico HI-FI en pantallas móviles */}
         {isActive && <MobileMiniChart isStable={isStable} />}
       </div>
-    </div>
+    </li>
   );
 };
 
@@ -142,10 +185,11 @@ export default function Metodologia() {
   // La lógica es simple: a partir del paso 3 (index 2), consideramos el sistema "Estable"
   const isStable = activeStep >= 2;
   const pathColor = isStable ? "#00A3FF" : "#ef4444";
-  const glowColor = isStable ? "rgba(0,163,255,0.4)" : "rgba(239,68,68,0.4)";
+  const glowColor = isStable ? "#00A3FF" : "#ef4444";
+  const stopColor = isStable ? "#00A3FF" : "#ef4444";
 
   return (
-    <section className="relative  text-white py-20 border-t border-white/5" id="metodologia">
+    <section className="relative text-white py-20 border-t border-white/5" id="metodologia">
       <div className="container mx-auto px-6 md:px-12 max-w-7xl">
         
         {/* Encabezado */}
@@ -162,9 +206,9 @@ export default function Metodologia() {
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-24 relative">
           
-          {/* COLUMNA IZQUIERDA: Línea de Tiempo Interactiva */}
-          {/* Reduje el padding inferior en móvil para que no quede tanto espacio vacío */}
-          <div className="flex flex-col relative z-10 pb-12 lg:pb-32">
+          {/* COLUMNA IZQUIERDA: Línea de Tiempo Interactiva (Semántica SEO) */}
+          {/* CAMBIO CLAVE SEO: Usamos <ol> en lugar de <div> */}
+          <ol className="flex flex-col relative z-10 pb-12 lg:pb-32 list-none m-0 p-0">
             {steps.map((step, index) => (
               <TimelineStep 
                 key={step.id} 
@@ -175,17 +219,16 @@ export default function Metodologia() {
                 isStable={index >= 2} // Pasamos la lógica al componente hijo
               />
             ))}
-          </div>
+          </ol>
 
-          {/* COLUMNA DERECHA: Monitor Gráfico Sticky (Solo Desktop) */}
-          {/* Se mantiene hidden en móvil (lg:block), ya que inyectamos el mini-gráfico arriba */}
+          {/* COLUMNA DERECHA: Monitor Gráfico Sticky HI-FI (Solo Desktop) */}
           <div className="hidden lg:block relative">
-            <div className="sticky top-40 w-full aspect-[4/3] rounded-xl border border-white/10 bg-[#0A0A0A] p-8 flex flex-col justify-between overflow-hidden shadow-2xl">
+            <div className="sticky top-40 w-full aspect-[4/3] rounded-xl border border-white/10 bg-[#080808] p-8 flex flex-col justify-between overflow-hidden shadow-2xl">
               
               {/* Header del Monitor */}
               <div className="flex justify-between items-start z-10">
                 <div>
-                  <h4 className="font-mono text-xs text-white/50 tracking-widest uppercase mb-1">Telemetría en Vivo</h4>
+                  <h4 className="font-mono text-xs text-white/50 tracking-widest uppercase mb-1.5">Telemetría en Vivo</h4>
                   <div className={cn(
                     "text-2xl font-bold tracking-tighter transition-colors duration-500",
                     isStable ? "text-[#00A3FF]" : "text-red-500"
@@ -199,39 +242,67 @@ export default function Metodologia() {
                 )} />
               </div>
 
-              {/* El Gráfico SVG Reactivo (Desktop) */}
+              {/* EL GRÁFICO SVG HI-FI (Desktop) */}
               <div className="absolute inset-0 flex items-center justify-center p-8 pointer-events-none">
-                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:2rem_2rem]"></div>
+                {/* Patrón de Rejilla de Fondo */}
+                <div className="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:2rem_2rem] opacity-30"></div>
                 
-                <svg viewBox="0 0 100 100" className="w-full h-full overflow-visible" preserveAspectRatio="none">
-<motion.path
-  initial={{ d: isStable ? stablePath : erraticPath }} // <-- AÑADE ESTA LÍNEA
-  d={isStable ? stablePath : erraticPath}
-  fill="transparent"
-                    stroke={glowColor}
-                    strokeWidth="8"
-                    className="blur-md transition-colors duration-700"
-                    animate={{ d: isStable ? stablePath : erraticPath }}
-                    transition={{ type: "spring", stiffness: 40, damping: 15 }}
-                  />
-                 <motion.path
-  initial={{ d: isStable ? stablePath : erraticPath }} // <-- AÑADE ESTA LÍNEA
-  d={isStable ? stablePath : erraticPath}
-  fill="transparent"
-                    stroke={pathColor}
-                    strokeWidth="3"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    animate={{ d: isStable ? stablePath : erraticPath }}
-                    transition={{ type: "spring", stiffness: 40, damping: 15 }}
-                  />
+                <svg 
+                  viewBox="0 0 100 100" 
+                  className="w-full h-full overflow-visible opacity-95" 
+                  preserveAspectRatio="xMidYMid meet" // <- Eliminamos "none", mantenemos proporción pro
+                  style={{ '--stop-color': stopColor } as React.CSSProperties}
+                >
+                    <GraphDefs id_prefix="desktop" />
+
+                    {/* CAPA 1: Degradado de Área bajo la línea (Sustancia) */}
+                    <motion.path
+                      initial={{ d: isStable ? stableLinePath : erraticLinePath }}
+                      d={isStable ? stableLinePath : erraticLinePath}
+                      fill={`url(#desktop-gradient-area)`}
+                      animate={{ d: isStable ? stableLinePath : erraticLinePath }}
+                      transition={{ type: "tween", duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    />
+
+                    {/* CAPA 2: Línea Principal (Frontera) */}
+                    <motion.path
+                      initial={{ d: isStable ? stableStrokePath : erraticStrokePath }}
+                      d={isStable ? stableStrokePath : erraticStrokePath}
+                      fill="transparent"
+                      stroke={pathColor}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="transition-colors duration-500"
+                      animate={{ d: isStable ? stableStrokePath : erraticStrokePath }}
+                      transition={{ type: "tween", duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    />
+
+                    {/* CAPA 3: Línea de Brillo (Glow Exterior) */}
+                    <motion.path
+                      initial={{ d: isStable ? stableStrokePath : erraticStrokePath }}
+                      d={isStable ? stableStrokePath : erraticStrokePath}
+                      fill="transparent"
+                      stroke={glowColor}
+                      strokeWidth="6"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      className="blur-sm opacity-50 transition-colors duration-500"
+                      animate={{ d: isStable ? stableStrokePath : erraticStrokePath }}
+                      transition={{ type: "tween", duration: 1, ease: [0.16, 1, 0.3, 1] }}
+                    />
+
                 </svg>
               </div>
 
-              {/* Footer del Monitor */}
+              {/* Footer del Monitor (Interactivo dinámicamente) */}
               <div className="flex justify-between items-end z-10 font-mono text-[10px] text-white/30 uppercase tracking-widest">
                 <span>Consumo Energético: {isStable ? "ÓPTIMO" : "ELEVADO"}</span>
-                <span>T° {isStable ? "24°C CONSTANTE" : "FLUCTUANTE"}</span>
+                {/* Añadimos micro-interacción parpadeante en la temperatura */}
+                <div className="flex items-center gap-1">
+                    <span className={cn("w-1.5 h-1.5 rounded-full", isStable ? "bg-[#00A3FF]" : "bg-red-500 animate-pulse")}></span>
+                    T° {isStable ? "24.0°C CONSTANTE" : "FLUCTUANTE"}
+                </div>
               </div>
 
             </div>
