@@ -2,8 +2,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
-import { Activity } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 const navLinks = [
@@ -34,15 +34,16 @@ export default function Navbar() {
           : "bg-[#050505]/50 backdrop-blur-md border-white/5"
       )}>
         
-        {/* LOGO */}
-        <a href="#" className="flex items-center gap-2 group relative z-50">
-          <div className="w-8 h-8 rounded-full bg-white flex items-center justify-center group-hover:scale-95 transition-transform duration-300">
-            <Activity className="w-4 h-4 text-black" strokeWidth={3} />
-          </div>
-          <span className="text-white font-black text-lg tracking-tighter uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-            Center<span className="text-[#00A3FF]">Service</span>
-          </span>
-        </a>
+   <div className="relative w-10 h-10 flex items-center justify-center group-hover:scale-95 transition-transform duration-300"> 
+  <Image 
+    src="/cslogo.png" 
+    alt="Center Service Logo" 
+    fill 
+    priority 
+    className="object-contain scale-175" // <--- Ajusta este valor (150 = 150%)
+    sizes="76px" 
+  /> 
+</div>
 
         {/* DESKTOP LINKS */}
         <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">
