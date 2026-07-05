@@ -1,7 +1,7 @@
 // src/components/layout/Footer.tsx
 "use client";
 
-import { Activity } from "lucide-react";
+import Image from "next/image";
 
 export default function Footer() {
   return (
@@ -16,14 +16,16 @@ export default function Footer() {
           
           {/* Marca */}
           <div className="lg:col-span-2 flex flex-col items-start">
-            <div className="flex items-center gap-2 mb-6">
-              <div className="w-10 h-10 rounded-full bg-[#00A3FF] flex items-center justify-center neo-brutal-glow">
-                <Activity className="w-5 h-5 text-black" strokeWidth={3} />
-              </div>
-              <span className="text-2xl font-black tracking-tighter uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-                Center<span className="text-[#00A3FF]">Service</span>
-              </span>
-            </div>
+          <div className="h-10 md:h-12 flex items-center group-hover:scale-95 transition-transform duration-300">
+            <Image 
+              src="/cscalogo.png" 
+              alt="Center Service Logo" 
+              width={220} // Ajusta este número si quieres que se vea aún más grande
+              height={48} 
+              priority 
+              className="h-full w-auto object-contain" 
+            />
+          </div>
             <p className="text-white/50 text-sm max-w-sm font-medium leading-relaxed">
               Ingeniería térmica de alta precisión. Diseñamos, instalamos y protegemos infraestructuras HVAC en entornos residenciales, comerciales e industriales en Venezuela.
             </p>

@@ -34,16 +34,20 @@ export default function Navbar() {
           : "bg-[#050505]/50 backdrop-blur-md border-white/5"
       )}>
         
-   <div className="relative w-10 h-10 flex items-center justify-center group-hover:scale-95 transition-transform duration-300"> 
+<div className="h-10 md:h-12 flex items-center group-hover:scale-95 transition-transform duration-300">
   <Image 
-    src="/cslogo.png" 
+    src="/cscalogo.png" 
     alt="Center Service Logo" 
-    fill 
+    width={220} // Ajusta este número si quieres que se vea aún más grande
+    height={48} 
     priority 
-    className="object-contain scale-175" // <--- Ajusta este valor (150 = 150%)
-    sizes="76px" 
-  /> 
+    className="h-full w-auto object-contain" 
+  />
 </div>
+
+
+
+
 
         {/* DESKTOP LINKS */}
         <nav className="hidden md:flex items-center gap-8 absolute left-1/2 -translate-x-1/2">

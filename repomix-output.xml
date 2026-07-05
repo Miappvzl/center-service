@@ -1780,7 +1780,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: "Center Service | Ingeniería Térmica y Climatización en Venezuela",
+  title: "Center Service | Proyectos y servicios en Climatización y refrigeración en Venezuela",
   description: "Líderes en climatización industrial, comercial y doméstica. Garantizamos continuidad operativa sin margen de error.",
 };
 

@@ -39,6 +39,14 @@ const sectors = [
     description: "Proyectos HVAC integrales. Cálculo de carga térmica, selección de equipos, unidades manejadoras de aire y cumplimiento estricto de normativas ASHRAE.",
     image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2670&auto=format&fit=crop",
     tags: ["Cálculo Térmico", "Selección de Equipos", "Normas ASHRAE"]
+  },
+  {
+    id: "05",
+    title: "INSTALADORES AUTORIZADOS DEL SISTEMA CARRIER CLIMAVISION.",
+    subtitle: "COD: ENG-AUDIT",
+    description: "Carrier ClimaVision ofrece una solución de automatización de climatización ligera diseñada específicamente para edificios pequeños como el suyo. Con ClimaVision, puede controlar y supervisar su sistema de climatización desde cualquier lugar, en cualquier momento, a través de una interfaz web intuitiva.",
+    image:  "/images/services/climavision.jpeg",
+    tags: ["Automatización", "Control Remoto", "Interfaz Web"]
   }
 ];
 
