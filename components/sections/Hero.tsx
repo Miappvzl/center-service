@@ -60,12 +60,23 @@ export default function Hero() {
             variants={{ hidden: { opacity: 0, y: 20 }, visible: { opacity: 1, y: 0, transition: { duration: 1, delay: 0.3, ease: EASE_ELITE } } }} 
             className="flex w-full justify-start md:justify-center mb-16"
           >
-            <button className="group relative px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-xs md:text-sm uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-3 hover:bg-gray-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)]" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-              <span className="relative z-10 flex items-center gap-2">
-                Agendar Inspección 
-                <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
-              </span>
-            </button>
+            <a 
+  href="https://wa.me/584144207165?text=Hola%2C%20requiero%20un%20servicio%20tecnico." 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="block w-fit no-underline"
+>
+  <button 
+    className="group relative px-8 py-4 md:px-10 md:py-5 bg-white text-black font-bold text-xs md:text-sm uppercase tracking-widest rounded-full overflow-hidden flex items-center gap-3 hover:bg-gray-200 transition-colors shadow-[0_0_30px_rgba(255,255,255,0.1)]" 
+    style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}
+  >
+    <span className="relative z-10 flex items-center gap-2">
+      Agendar Inspección
+      <ArrowUpRight className="w-4 h-4 md:w-5 md:h-5 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform duration-300" />
+    </span>
+  </button>
+</a>
+
           </motion.div>
 
           {/* Features Bottom */}

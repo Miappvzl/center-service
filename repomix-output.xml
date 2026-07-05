@@ -238,7 +238,7 @@ export default function Contacto() {
               <Phone className="w-6 h-6 text-[#00A3FF] shrink-0" />
               <div>
                 <h4 className="text-white font-bold mb-1 uppercase tracking-tight">LÍNEA DIRECTA</h4>
-                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>+58 412 000 0000</p>
+                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>+58 414 420 7165</p>
               </div>
             </div>
 
@@ -1072,7 +1072,7 @@ export default function Footer() {
             <h4 className="font-mono text-xs text-[#00A3FF] uppercase tracking-widest font-bold mb-6">Soporte</h4>
             <ul className="flex flex-col gap-4">
               <li className="text-white/60 text-sm font-medium">Emergencias 24/7</li>
-              <li className="text-white/60 text-sm font-medium">+58 412 000 0000</li>
+              <li className="text-white/60 text-sm font-medium">+58 414 420 7165</li>
               <li className="text-white/60 text-sm font-medium">contacto@centerserviceve.com</li>
             </ul>
           </div>

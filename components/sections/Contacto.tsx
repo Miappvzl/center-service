@@ -23,11 +23,11 @@ export default function Contacto() {
   const [selectedService, setSelectedService] = useState<string | null>(null);
 
   // Número de WhatsApp real de Center Service
-  const whatsappNumber = "584120000000"; 
+  const whatsappNumber = "584144207165"; 
 
   // Generador del mensaje dinámico (Texto Humano)
   const handleWhatsAppClick = () => {
-    let mensaje = "Hola, me gustaría agendar una visita técnica con Center Service.";
+    let mensaje = "Hola, me gustaría agendar una visita técnica Exergia.";
     
     if (selectedLocation && selectedService) {
       const locLabel = locations.find(l => l.id === selectedLocation)?.label.toLowerCase();
@@ -72,7 +72,7 @@ export default function Contacto() {
               <MapPin className="w-6 h-6 text-[#00A3FF] shrink-0" />
               <div>
                 <h4 className="text-white font-bold mb-1 uppercase tracking-tight">COBERTURA CENTRAL</h4>
-                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Cojedes y estados vecinos. Emergencias 24/7.</p>
+                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>Cobertura a nivel nacional. Oficina principal: Carabobo-Valencia C.C Gran Bazar av Lara</p>
               </div>
             </div>
 
@@ -80,7 +80,7 @@ export default function Contacto() {
               <Phone className="w-6 h-6 text-[#00A3FF] shrink-0" />
               <div>
                 <h4 className="text-white font-bold mb-1 uppercase tracking-tight">LÍNEA DIRECTA</h4>
-                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>+58 412 000 0000</p>
+                <p className="text-white/50 text-sm font-mono" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>+58 4144207165</p>
               </div>
             </div>
 

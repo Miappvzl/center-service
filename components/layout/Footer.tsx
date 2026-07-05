@@ -44,7 +44,7 @@ export default function Footer() {
             <h4 className="font-mono text-xs text-[#00A3FF] uppercase tracking-widest font-bold mb-6">Soporte</h4>
             <ul className="flex flex-col gap-4">
               <li className="text-white/60 text-sm font-medium">Emergencias 24/7</li>
-              <li className="text-white/60 text-sm font-medium">+58 412 000 0000</li>
+              <li className="text-white/60 text-sm font-medium">+58 414 420 7165</li>
               <li className="text-white/60 text-sm font-medium">contacto@centerserviceve.com</li>
             </ul>
           </div>
