@@ -55,14 +55,18 @@ export default function Sectores() {
 
   return (
     // ✅ DESPUÉS (Deja ver el fluido)
-<section className="relative py-24 md:py-40 text-white border-t border-white/5" id="sectores">
-      <div className="container mx-auto px-6 md:px-12 max-w-7xl">
+<section className="relative py-24 md:py-40 text-white border-t border-white/5 overflow-hidden" id="sectores">
+  
+  {/* LUZ AMBIENTAL PARA ALIMENTAR EL FILTRO DE CRISTAL */}
+  <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-[#00A3FF]/[0.03] rounded-full blur-[120px] pointer-events-none -z-10" />
+
+  <div className="container mx-auto px-6 md:px-12 max-w-7xl relative z-10">
         
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8">
           
           {/* COLUMNA IZQUIERDA: Header Sticky */}
           {/* Añadimos gpu-accelerated para que el sticky no cause repaints costosos */}
-          <div className="lg:col-span-4 flex flex-col items-start lg:sticky lg:top-32 h-fit gpu-accelerated">
+          <div className="lg:col-span-4 flex flex-col items-start lg:sticky lg:top-32 h-fit">
             <motion.div 
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -97,7 +101,7 @@ export default function Sectores() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true, margin: "-50px" }}
                   transition={{ duration: 0.6, delay: index * 0.1, ease: [0.16, 1, 0.3, 1] }}
-                  className="border-b border-white/10 flex flex-col gpu-accelerated"
+                  className="border-b border-white/10 flex flex-col"
                 >
                   {/* BOTÓN DEL ACORDEÓN */}
                   <button 
@@ -157,7 +161,7 @@ export default function Sectores() {
 
                           {/* IMAGEN ULTRA-OPTIMIZADA CON NEXT/IMAGE */}
                           {/* Envolvemos en un contenedor relative con aspect ratio forzado */}
-                          <div className="w-full md:w-5/12 aspect-[4/3] md:aspect-square bg-[#0A0A0A] overflow-hidden relative group border border-white/5 gpu-accelerated rounded-sm">
+                        <div className="w-full md:w-5/12 aspect-[4/3] md:aspect-square bg-[#050505] overflow-hidden relative group border border-white/15 rounded-sm">
                             
                            <Image 
   src={sector.image} 
