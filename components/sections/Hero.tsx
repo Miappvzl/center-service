@@ -24,7 +24,7 @@ export default function Hero() {
           <motion.div variants={fadeUpVariants} className="mb-8">
             <div className="inline-flex items-center gap-3 font-mono text-[11px] md:text-xs text-white/80 font-medium tracking-[0.2em] uppercase border border-white/10 bg-[#0A0A0A] px-4 py-2 rounded-none backdrop-blur-md shadow-[0_0_15px_rgba(0,163,255,0.05)]" style={{ fontFamily: 'var(--font-jetbrains), monospace' }}>
               <span className="w-1.5 h-1.5 rounded-full bg-[#00A3FF] animate-pulse shadow-[0_0_8px_rgba(0,163,255,0.8)]"></span>
-              <span><span className="text-white/30 mr-2">1 [INFO]</span> Ingeniería Térmica</span>
+              <span><span className="text-white/30 mr-2">1 </span>PROYECTOS Y SERVICIOS </span>
             </div>
           </motion.div>
 
@@ -32,17 +32,17 @@ export default function Hero() {
           <div className="flex flex-col mb-8 w-full">
             <div className="overflow-hidden">
               <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-                INGENIERÍA EN
+                 SERVICIOS EN
               </motion.h1>
             </div>
             <div className="overflow-hidden">
               <motion.h1 variants={textRevealVariants} className="text-5xl sm:text-7xl lg:text-[110px] font-black tracking-tighter leading-[0.9] text-white/30 uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-                CLIMATIZACIÓN Y 
+                REFRIGERACIÓN Y 
               </motion.h1>
             </div>
             <div className="overflow-hidden mt-1 md:mt-2">
               <motion.h1 variants={textRevealVariants} className="text-4xl sm:text-5xl lg:text-[80px] font-bold tracking-tight leading-[0.9] text-[#00A3FF] uppercase" style={{ fontFamily: 'var(--font-space-grotesk), sans-serif' }}>
-                REFRIGERACIÓN.
+                CLIMATIZACION
               </motion.h1>
             </div>
           </div>

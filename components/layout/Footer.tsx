@@ -27,7 +27,7 @@ export default function Footer() {
             />
           </div>
             <p className="text-white/50 text-sm max-w-sm font-medium leading-relaxed">
-              Ingeniería térmica de alta precisión. Diseñamos, instalamos y protegemos infraestructuras HVAC en entornos residenciales, comerciales e industriales en Venezuela.
+              Diseñamos, instalamos y protegemos infraestructuras HVAC en entornos residenciales, comerciales e industriales en Venezuela.
             </p>
           </div>
 

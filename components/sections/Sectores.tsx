@@ -34,7 +34,7 @@ const sectors = [
   },
   {
     id: "04",
-    title: "PROYECTOS DE INGENIERÍA",
+    title: "CÁLCULO DE CARGA TÉRMICA Y SELECCIÓN DE EQUIPOS",
     subtitle: "COD: ENG-AUDIT",
     description: "Proyectos HVAC integrales. Cálculo de carga térmica, selección de equipos, unidades manejadoras de aire y cumplimiento estricto de normativas ASHRAE.",
     image: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=2670&auto=format&fit=crop",

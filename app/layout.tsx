@@ -11,7 +11,7 @@ const spaceGrotesk = Space_Grotesk({ subsets: ["latin"], variable: "--font-space
 const jetBrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" });
 
 export const metadata: Metadata = {
-  title: "Exergia | Ingeniería Térmica y Climatización en Venezuela",
+  title: "Exergia | Servicios y Proyectos Climatización y Refrigeración en Venezuela",
   description: "Líderes en climatización industrial, comercial y doméstica. Garantizamos continuidad operativa sin margen de error.",
 };
 
